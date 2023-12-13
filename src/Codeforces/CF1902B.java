@@ -1,29 +1,14 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.TreeSet;
-import java.util.LinkedHashSet;
 import java.util.Arrays;
-import java.util.TreeMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.PriorityQueue;
-import java.util.Map.Entry;
-import java.util.Stack;
-import java.util.Deque;
-import java.util.Collections;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+public final class CF1902B {
     private static long mod = (long)1e9+7;
     private static FastReader reader = new FastReader();
     public static void main(String[] args) {
@@ -31,8 +16,24 @@ public final class Template {
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            long n = reader.nextLong();
+            long p = reader.nextLong();
+            long l = reader.nextLong();
+            long t = reader.nextLong();
+            long tasks = (long)Math.ceil((1d*n)/7d);
+            long taskPoint = tasks*t;
+            long tasksDays = (tasks+1)/2;
 
-
+            long point = taskPoint + l*tasksDays;
+            if(p > point){
+                long left = p - point;
+                long lDays = (long)Math.ceil((1d*left)/(1d*l));
+                out.println(n-(tasksDays + lDays));
+            }else{
+                long dayPoint = 2*t + l;
+                long days = (long)Math.ceil((1d*p)/(dayPoint));
+                out.println(n-days);
+            }
         }
 
         out.flush();

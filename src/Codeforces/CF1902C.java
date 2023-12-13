@@ -1,29 +1,13 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.TreeSet;
-import java.util.LinkedHashSet;
-import java.util.Arrays;
-import java.util.TreeMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.PriorityQueue;
-import java.util.Map.Entry;
-import java.util.Stack;
-import java.util.Deque;
-import java.util.Collections;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public final class Template {
+public final class CF1902C {
     private static long mod = (long)1e9+7;
     private static FastReader reader = new FastReader();
     public static void main(String[] args) {
@@ -31,12 +15,60 @@ public final class Template {
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            int n = read();
+            long arr[] = longArray(n);
+            if(n==1){
+                out.println(1);
+                continue;
+            }
+            Arrays.sort(arr);
+            long max = arr[n-1];
+            long min = arr[0];
+            long maxDiff[] = new long[n];
+            long minDiff[] = new long[n];
+            for(int i=0;i<n;i++){
+                maxDiff[i] = max - arr[i];
+                minDiff[i] = arr[i] - min;
+            }
 
+            long gcd = 0;
+            for(int i=0;i<n;i++){
+                gcd = gcd(maxDiff[i], gcd);
+            }
+            long stepsFor = 0;
+            long stepsBack = 0;
+            for(int i=0;i<n;i++){
+                stepsFor += maxDiff[i]/gcd;
+                stepsBack += minDiff[i]/gcd;
+            }
 
+            long num1 = Long.MIN_VALUE;
+            long num2 = Long.MIN_VALUE;
+
+            for(int i=n-1;i>=0;i--){
+                if(arr[i] != arr[n-1]-(n-i-1)*gcd){
+                    num2 = arr[n-1] - (n-1-i)*gcd;
+                    break;
+                }
+            }
+            List<Long> result = new ArrayList<>();
+            result.add(stepsFor+n);
+
+            if(num2 != Long.MIN_VALUE){
+                long step1 = (max - num2)/gcd;
+                result.add(stepsFor+step1);
+            }
+
+            out.println(result.stream().min(Long::compareTo).get());
         }
 
         out.flush();
         out.close();
+    }
+
+    private static long gcd(long a, long b){
+        if(a==0) return b;
+        return gcd(b%a, a);
     }
 
 

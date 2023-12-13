@@ -1,29 +1,12 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.TreeSet;
-import java.util.LinkedHashSet;
-import java.util.Arrays;
-import java.util.TreeMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.PriorityQueue;
-import java.util.Map.Entry;
-import java.util.Stack;
-import java.util.Deque;
-import java.util.Collections;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public final class Template {
+public final class CCStart111A {
     private static long mod = (long)1e9+7;
     private static FastReader reader = new FastReader();
     public static void main(String[] args) {
@@ -31,8 +14,26 @@ public final class Template {
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            Set<Character> set =new HashSet<>(Arrays.asList('A', 'E', 'I', 'O', 'U'));
+
+            char c[] = "CAPETOWN".toCharArray();
+            String s = reader.next();
+            boolean result = true;
+            for(int i=0;i<s.length();i++){
+                if(set.contains(c[i]) && !set.contains(s.charAt(i))){
+                    result = false;
+                    break;
+                }
+                if(set.contains(s.charAt(i)) && !set.contains(c[i])){
+                    result = false;
+                    break;
+                }
 
 
+            }
+
+            if(result) out.println("YES");
+            else out.println("NO");
         }
 
         out.flush();

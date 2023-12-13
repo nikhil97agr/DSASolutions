@@ -1,29 +1,17 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.TreeSet;
-import java.util.LinkedHashSet;
+import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.TreeMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.PriorityQueue;
-import java.util.Map.Entry;
-import java.util.Stack;
-import java.util.Deque;
-import java.util.Collections;
+import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
-public final class Template {
+public final class CCStart111E {
     private static long mod = (long)1e9+7;
     private static FastReader reader = new FastReader();
     public static void main(String[] args) {
@@ -32,12 +20,38 @@ public final class Template {
         int test = reader.nextInt();
         while (test-- > 0) {
 
+            int n = read();
+            long arr[] = longArray(n-1);
+
+            long ans = 0;
+            boolean contains[] = new boolean[n+1];
+            for(long x : arr){
+                contains[(int)x] = true;
+            }
+
+            long notContain = 0;
+            for(int i=1;i<=n;i++){
+                if(!contains[i]){
+                    notContain = i;
+                    break;
+                }
+            }
+
+            for(int i=n-2;i>=0;i--){
+                long min = Math.min(notContain, arr[i]);
+                ans += Math.max(min, i+2);
+                notContain = Math.max(notContain, arr[i]);
+            }
+
+            ans += Math.max(notContain, 1);
+            out.println(ans);
 
         }
 
         out.flush();
         out.close();
     }
+
 
 
     private static String[] stringArray(int n){
@@ -111,11 +125,11 @@ public final class Template {
         return Arrays.stream(arr).min().getAsInt();
     }
 
-    private long multiplyMod(long a, long b){
+    private static long multiplyMod(long a, long b){
         return (a*b)%mod;
     }
 
-    private long addMod(long a, long b){
+    private static long addMod(long a, long b){
         return (a+b)%mod;
     }
 

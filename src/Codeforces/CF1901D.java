@@ -1,37 +1,51 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.TreeSet;
-import java.util.LinkedHashSet;
 import java.util.Arrays;
-import java.util.TreeMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.PriorityQueue;
-import java.util.Map.Entry;
-import java.util.Stack;
-import java.util.Deque;
-import java.util.Collections;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+public final class CF1901D {
     private static long mod = (long)1e9+7;
     private static FastReader reader = new FastReader();
     public static void main(String[] args) {
         PrintWriter out = new PrintWriter(System.out);
-        // int test = 1;
-        int test = reader.nextInt();
+         int test = 1;
+//        int test = reader.nextInt();
         while (test-- > 0) {
+            int n = read();
+            long arr[] = longArray(n);
 
+            long prefix[] = new long[n];
+            long suffix[] = new long[n];
+            for(int i=0;i<n;i++){
+                prefix[i] = arr[i] + (n-1-i);
+                suffix[i] = arr[i] + i;
+            }
+
+            for(int i=1;i<n;i++){
+                prefix[i] = Math.max(prefix[i], prefix[i-1]);
+            }
+            for(int i=n-2;i>=0;i--){
+                suffix[i] = Math.max(suffix[i], suffix[i+1]);
+            }
+
+            long ans = Long.MAX_VALUE;
+            for(int i=0;i<n;i++){
+                long temp = arr[i];
+                if(i-1>=0){
+                    temp = Math.max(temp, prefix[i-1]);
+                }
+                if(i+1 <n){
+                    temp = Math.max(temp, suffix[i+1]);
+                }
+
+                ans = Math.min(ans, temp);
+            }
+            out.println(ans);
 
         }
 

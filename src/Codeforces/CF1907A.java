@@ -1,29 +1,14 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.TreeSet;
-import java.util.LinkedHashSet;
 import java.util.Arrays;
-import java.util.TreeMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.PriorityQueue;
-import java.util.Map.Entry;
-import java.util.Stack;
-import java.util.Deque;
-import java.util.Collections;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+public final class CF1907A {
     private static long mod = (long)1e9+7;
     private static FastReader reader = new FastReader();
     public static void main(String[] args) {
@@ -31,7 +16,19 @@ public final class Template {
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
-
+            char ch[] = reader.next().toCharArray();
+            int digit = (ch[1] - '0');
+            char c = ch[0];
+            for(int i=1;i<=8;i++){
+                if(i!=digit){
+                    out.println(c+""+i);
+                }
+            }
+            for(char cc = 'a';cc<='h';cc++){
+                if(cc!=c){
+                    out.println(cc+""+digit);
+                }
+            }
 
         }
 

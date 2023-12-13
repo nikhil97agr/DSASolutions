@@ -1,29 +1,15 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.TreeSet;
-import java.util.LinkedHashSet;
 import java.util.Arrays;
-import java.util.TreeMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.PriorityQueue;
-import java.util.Map.Entry;
-import java.util.Stack;
-import java.util.Deque;
-import java.util.Collections;
+import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 
-public final class Template {
+class CCStart111B {
     private static long mod = (long)1e9+7;
     private static FastReader reader = new FastReader();
     public static void main(String[] args) {
@@ -31,8 +17,19 @@ public final class Template {
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            int n = read();
+            TreeMap<Character, Integer> map = new TreeMap<>();
+            String s = reader.next();
+            for(char c : s.toCharArray()){
+                addToMap(c, map);
+            }
 
-
+            long ans = 1;
+            for(int val : map.values()){
+                ans *= (val+1);
+                ans %=mod;
+            }
+            out.println(ans-1);
         }
 
         out.flush();

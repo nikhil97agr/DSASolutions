@@ -1,29 +1,12 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.TreeSet;
-import java.util.LinkedHashSet;
-import java.util.Arrays;
-import java.util.TreeMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.PriorityQueue;
-import java.util.Map.Entry;
-import java.util.Stack;
-import java.util.Deque;
-import java.util.Collections;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public final class Template {
+public final class CF1901C {
     private static long mod = (long)1e9+7;
     private static FastReader reader = new FastReader();
     public static void main(String[] args) {
@@ -31,6 +14,35 @@ public final class Template {
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            int n = read();
+            long arr[] = longArray(n);
+            long min = Arrays.stream(arr).min().getAsLong();
+            long max = Arrays.stream(arr).max().getAsLong();
+
+            List<Long>  list = new ArrayList<>();
+            while(min!=max){
+                if((min&1l)==1 && (max&1l)==0){
+                    min++;
+                    max++;
+                    list.add(1l);
+                }else{
+                    list.add(0l);
+                }
+
+                min/=2;
+                max/=2;
+
+
+            }
+
+            out.println(list.size());
+            if(list.size()<=n){
+                for(long x : list){
+                    out.print(x+" ");
+                }
+                out.println();
+            }
+
 
 
         }

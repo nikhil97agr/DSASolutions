@@ -1,29 +1,12 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.TreeSet;
-import java.util.LinkedHashSet;
-import java.util.Arrays;
-import java.util.TreeMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.PriorityQueue;
-import java.util.Map.Entry;
-import java.util.Stack;
-import java.util.Deque;
-import java.util.Collections;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public final class Template {
+public final class CF1907B {
     private static long mod = (long)1e9+7;
     private static FastReader reader = new FastReader();
     public static void main(String[] args) {
@@ -31,8 +14,47 @@ public final class Template {
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            String s = reader.next();
+            Deque<Pair<Integer>> lower =new LinkedList<>();
+            Deque<Pair<Integer>> upper = new LinkedList<>();
+            int n = s.length();
+            for(int i=0;i<n;i++){
+                char c = s.charAt(i);
+                if (Character.isUpperCase(c)) {
+                    if(c=='B'){
+                        if(!upper.isEmpty()){
+                            upper.removeLast();
+                        }
+                    }else{
+                        upper.add(new Pair<>(c, i));
+                    }
+                }else{
+                    if(c=='b'){
+                        if(!lower.isEmpty()){
+                            lower.removeLast();
+                        }
+                    }else{
+                        lower.add(new Pair<>(c, i));
+                    }
+                }
+            }
+            StringBuilder result = new StringBuilder();
 
+            while(!lower.isEmpty() && !upper.isEmpty()){
+                if(lower.peek().second < upper.peek().second){
+                    result.append(lower.poll().first);
+                }else{
+                    result.append(upper.poll().first);
+                }
+            }
 
+            while(!lower.isEmpty()){
+                result.append(lower.poll().first);
+            }
+            while(!upper.isEmpty()){
+                result.append(upper.poll().first);
+            }
+            out.println(result.toString());
         }
 
         out.flush();
@@ -120,24 +142,17 @@ public final class Template {
     }
 
     static class Pair<T>{
-        T first;
-        T second;
+        char first;
+        int second;
 
-        public Pair(T first, T second){
+        public Pair(char first, int second){
             this.first = first;
             this.second =second;
         }
 
-        @Override
-        public boolean equals(Object ob){
-            Pair pair = (Pair)ob;
-            return this.first == pair.first && this.second == pair.second;
-        }
 
-        @Override
-        public int hashCode(){
-            return (first.toString()+":"+second.toString()).hashCode();
-        }
+
+
 
 
     }

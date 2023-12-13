@@ -1,36 +1,52 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.TreeSet;
-import java.util.LinkedHashSet;
-import java.util.Arrays;
-import java.util.TreeMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.PriorityQueue;
-import java.util.Map.Entry;
-import java.util.Stack;
-import java.util.Deque;
-import java.util.Collections;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public final class Template {
+public final class CF1902D {
     private static long mod = (long)1e9+7;
     private static FastReader reader = new FastReader();
     public static void main(String[] args) {
         PrintWriter out = new PrintWriter(System.out);
-        // int test = 1;
-        int test = reader.nextInt();
+         int test = 1;
+//        int test = reader.nextInt();
         while (test-- > 0) {
+            int n =read();
+            String arr[] = stringArray(n);
+            Map<Character, List<String>>map = new HashMap<>();
+            long totalLength = 0;
+            Map<Character, Long> lengthMap = new HashMap<>();
+            for(String s : arr){
+                char c = s.charAt(0);
+                map.computeIfAbsent(c, ch-> new ArrayList<>()).add(s);
+                totalLength += s.length();
+                lengthMap.put(c, lengthMap.getOrDefault(c, 0l)+s.length());
+            }
+            System.out.println(map);
+            System.out.println(lengthMap);
+            long ans = 0;
+            for(String s : arr){
+                char c = s.charAt(s.length()-1);
+                long len = lengthMap.getOrDefault(c, 0l);
+                long size = map.getOrDefault(c, new ArrayList<>()).size();
+                long l = (n-size)*(s.length()) + (totalLength - len);
+                ans += l;
+            }
+
+            for(String s : arr){
+                char c = s.charAt(s.length()-1);
+                if(!lengthMap.containsKey(c)) continue;
+                long len = lengthMap.get(c);
+                long size = map.get(c).size();
+                long l = (s.length()-1) *(size);
+                ans += l + len - size;
+            }
+
+            System.out.println(ans);
+
 
 
         }

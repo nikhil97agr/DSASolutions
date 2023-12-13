@@ -1,37 +1,73 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.TreeSet;
-import java.util.LinkedHashSet;
 import java.util.Arrays;
-import java.util.TreeMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.PriorityQueue;
-import java.util.Map.Entry;
-import java.util.Stack;
-import java.util.Deque;
-import java.util.Collections;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+public final class CF1903D {
     private static long mod = (long)1e9+7;
     private static FastReader reader = new FastReader();
     public static void main(String[] args) {
         PrintWriter out = new PrintWriter(System.out);
-        // int test = 1;
-        int test = reader.nextInt();
+         int test = 1;
+//        int test = reader.nextInt();
         while (test-- > 0) {
+            int n = read();
+            int q = read();
+            long arr[] = longArray(n);
 
+            for(int i=0;i<q;i++){
+                long k = reader.nextLong();
+                long ans = 0;
+                long temp[] = arr.clone();
+                for(int j=60;j>=0;j--){
+                    long steps = 0;
+                    for(long x : temp){
+                        long bit = (x &(1L<<j));
+                        if(bit==0){
+                            long req = 1L<<j;
+                            long left = req - x;
+                            steps += left;
+                        }
+                        if(steps > k) break;
+                    }
+                    if(steps <= k){
+
+                        ans |= 1L <<j;
+                        for(int l=0;l<n;l++){
+                            long num = temp[l];
+                            long bit = (num & (1L<<j));
+                            if(bit==0){
+                                temp[l] = 0;
+                            }else{
+                                temp[l] = temp[l]^(1L<<j);
+                            }
+                        }
+                        k -= steps;
+                    }else{
+                        for(int l=0;l<n;l++){
+                            long num = temp[l];
+                            long bit = (num & (1L<<j)) > 0 ? 1 : 0;
+
+                                if(bit==1){
+                                    temp[l] = num^(1L<<j);
+                                }
+
+                        }
+
+                    }
+                }
+                out.println(ans);
+
+
+
+
+
+            }
 
         }
 
