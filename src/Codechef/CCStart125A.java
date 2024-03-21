@@ -1,13 +1,14 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+class CCStart125A {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -18,16 +19,28 @@ public final class Template {
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            int n = read();
+            char c[] =charArray();
+            int cnt = 0;
+            int zero = 0;
+            int temp = 0;
+            for(int i=0;i<n;i++){
+                if(c[i] == '1'){
+                    cnt++;
+                    zero = max(zero, temp);
+                    temp = 0;
+                }
+                else{
+                    temp++;
+                }
+            }
+            zero = max(temp, zero);
+            out.println(cnt + zero);
 
-            solve(out);
         }
 
         out.flush();
         out.close();
-    }
-
-    private static void solve(PrintWriter out){
-
     }
 
 

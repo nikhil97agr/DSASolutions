@@ -1,13 +1,14 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+class CCStart124D {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -18,16 +19,65 @@ public final class Template {
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            int l = read();
+            int r= read();
 
-            solve(out);
+            if((r-l+1)%2==0){
+                while(l<=r){
+                    out.print(l+1+" "+l+" ");
+                    l+=2;
+                }
+                out.println();
+                continue;
+            }
+
+            if(l==r && l!=1){
+                out.println(-1);
+                continue;
+            }
+            if(l==r){
+                out.println(1);
+                continue;
+            }
+
+            if(l%2==0){
+                out.println(-1);
+                continue;
+            }
+
+            if(gcd(l, r)==1){
+                out.print(r+" ");
+                while(l<r){
+                    out.print(l+" ");
+                    l++;
+                }
+                out.println();
+                continue;
+            }
+
+           int ans[] = new int[r-l+1];
+            int n = ans.length;
+
+            ans[0] = l+1;
+            ans[1] = l+2;
+            ans[2] = l;
+            l=l+3;
+            for(int i=3;i<n;i+=2){
+                ans[i] = l+1;
+                ans[i+1] = l;
+                l+=2;
+            }
+            for(int  x : ans){
+                out.print(x+" ");
+            }
+            out.println();
+
+
+
         }
 
         out.flush();
         out.close();
-    }
-
-    private static void solve(PrintWriter out){
-
     }
 
 

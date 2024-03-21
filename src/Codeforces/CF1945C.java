@@ -1,13 +1,12 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public final class Template {
+public final class CF1945C {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +26,54 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        char arr[] = charArray();
 
+        int ans = -1;
+        int left[] = new int[n+1];
+        int right[] = new int[n+1];
+        for(int i=1;i<=n;i++){
+            if(arr[i-1] == '0'){
+                left[i]  = left[i-1] + 1;
+            }else{
+                left[i] = left[i-1];
+            }
+        }
+        for(int j=n-1;j>=0;j--){
+            if(arr[j] == '1'){
+                right[j] = right[j+1] +1;
+            }else{
+                right[j] = right[j+1];
+            }
+        }
+        List<Integer> list = new ArrayList<>();
+        for(int i=0;i<=n;i++){
+            if(left[i] >= (i+1)/2 && right[i] >= (n-i+1)/2){
+                list.add(i);
+            }
+        }
+        if(n%2==0){
+            n/=2;
+            for(int x : list){
+                if(Math.abs(ans - n) > Math.abs(n - x)){
+                    ans = x;
+                }
+            }
+        }else{
+            double m = (1d*n)/2d;
+            for(int x : list){
+                if(ans == -1) {
+                    ans = x;
+                    continue;
+                }
+                if(Math.abs(1D*ans - m) > Math.abs(m - 1d*x)){
+                    ans=  x;
+
+                }
+            }
+        }
+
+        out.println(ans);
     }
 
 

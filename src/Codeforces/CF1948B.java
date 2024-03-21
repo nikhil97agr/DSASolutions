@@ -1,13 +1,12 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public final class Template {
+public final class CF1948B {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +26,33 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        int arr[] = intArray(n, false);
+        Stack<Integer> stack = new Stack<>();
+        for(int i=n-1;i>=0;i--){
+            if(stack.isEmpty()){
+                stack.push(arr[i]);
+                continue;
+            }
+            if(arr[i] <= stack.peek()){
+                stack.push(arr[i]);
+                continue;
+            }
 
+            int x = arr[i];
+            while(x > 0){
+                int dig = x%10;
+                if(dig > stack.peek()){
+                    out.println(NO);
+                    return;
+                }
+                stack.push(dig);
+                x/=10;
+            }
+        }
+
+        out.println(YES);
+        return;
     }
 
 

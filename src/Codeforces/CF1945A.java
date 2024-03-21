@@ -1,13 +1,14 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+public final class CF1945A {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +28,38 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
-
+        long a = read();
+        long b=  read();
+        long c =read();
+        long ans = a;
+        ans += b/3;
+        long left = b%3;
+        if(left != 0){
+            if(c == 0){
+                out.println(-1);
+                return;
+            }else{
+                long temp = (3L - left);
+                ans++;
+                if( c < temp){
+                    out.println(-1);
+                    return;
+                }
+                c -= temp;
+                if(c%3==0){
+                    ans += c/3;
+                }else{
+                     ans += c/3 + 1;
+                }
+            }
+        }else{
+            if(c%3==0){
+                ans += c/3;
+            }else{
+                ans += c/3 + 1;
+            }
+        }
+        out.println(ans);
     }
 
 

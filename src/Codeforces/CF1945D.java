@@ -1,13 +1,15 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-public final class Template {
+public final class CF1945D {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,6 +29,25 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        int m=  read();
+        long a[] = longArray(n, true);
+        long b[] = longArray(n, true);
+        long prefix[] = new long[n+1];
+        for(int i=n-1;i>0;i--){
+            prefix[i] = prefix[i+1] + b[i+1];
+        }
+        long ans = Long.MAX_VALUE;
+        for(int i=1;i<=m;i++){
+            ans = min(ans, prefix[i] + a[i]);
+        }
+        for(int i=m+1;i<=n;i++){
+            ans = min(ans, ans - b[i] + a[i]);
+
+
+        }
+
+        out.println(ans);
 
     }
 

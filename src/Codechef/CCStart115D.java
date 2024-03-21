@@ -1,91 +1,91 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
-    private final static long mod = (long)1e9+7;
-    private final static FastReader reader = new FastReader();
-    private final static String YES = "YES";
-    private final static String NO = "NO";
-
+class CCStart115D {
+    private static long mod = (long)1e9+7;
+    private static FastReader reader = new FastReader();
     public static void main(String[] args) {
         PrintWriter out = new PrintWriter(System.out);
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            int n = read();
+            long arr[]= longArray(n);
 
-            solve(out);
+            long ans = n;
+
+            long operations = 0;
+            long prefix[] = new long[n];
+            Map<Long, Integer> map = new HashMap<>();
+            prefix[0] = arr[0];
+            addToMap(arr[0], map);
+            for(int i=1;i<n;i++){
+                prefix[i] = min(prefix[i-1], arr[i]);
+                addToMap(arr[i], map);
+            }
+            int left = n;
+            int direct = 0;
+            for(int i=n-1;i>=0;i--){
+                if(prefix[i]  < arr[i]){
+                    direct++;
+                    removeFromMap(arr[i], map);
+                    left--;
+                }else{
+                    if(map.containsKey(arr[i])){
+                        ans = Math.min(ans, operations + direct + left);
+                        left -= map.get(arr[i]);
+                        map.remove(arr[i]);
+                        arr[i] -= operations;
+                        operations += arr[i];
+
+                    }
+                }
+
+            }
+
+            out.println(min(ans, operations+direct));
+
+
+
+
+
+
         }
 
         out.flush();
         out.close();
     }
 
-    private static void solve(PrintWriter out){
 
-    }
-
-
-    private static String[] stringArray(int n, boolean oneIndexed){
-        int i=0;
+    private static String[] stringArray(int n){
         String s[] = new String[n];
-        if(oneIndexed){
-            i=1;
-            s = new String[n+1];
-            n++;
-        }
-
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             s[i] = reader.next();
         }
         return s;
     }
-
-    private static long readLong(){
-        return reader.nextLong();
-    }
-
-
-
-    private static int[] intArray(int n, boolean oneIndexed){
-        int i=0;
+    private static int[] intArray(int n){
         int arr[] = new int[n];
-        if(oneIndexed){
-            i = 1;
-            arr = new int[n+1];
-            n++;
-        }
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             arr[i] = reader.nextInt();
         }
         return arr;
     }
 
-    private static long[] longArray(int n, boolean oneIndexed){
+    private static long[] longArray(int n){
         long arr[] = new long[n];
-        int i =0;
-        if(oneIndexed){
-            i=1;
-            arr = new long[n+1];
-            n++;
-        }
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             arr[i] = reader.nextLong();
         }
         return arr;
-    }
-
-    private static char[] charArray(){
-        return readStr().toCharArray();
-    }
-
-    private static String readStr(){
-        return reader.next();
     }
     private static int read(){
         return reader.nextInt();
@@ -147,11 +147,12 @@ public final class Template {
         return gcd(b%a, a);
     }
 
-    private static int gcd(int a, int b) {
-        if (a == 0) return b;
+    private static int gcd(int a, int b){
+        if(a==0) return b;
 
-        return gcd(b % a, a);
+        return gcd(b%a,a);
     }
+
 
     private long multiplyMod(long a, long b){
         return (a*b)%mod;
@@ -159,6 +160,29 @@ public final class Template {
 
     private long addMod(long a, long b){
         return (a+b)%mod;
+    }
+
+    static class Pair<T>{
+        T first;
+        T second;
+
+        public Pair(T first, T second){
+            this.first = first;
+            this.second =second;
+        }
+
+        @Override
+        public boolean equals(Object ob){
+            Pair pair = (Pair)ob;
+            return this.first == pair.first && this.second == pair.second;
+        }
+
+        @Override
+        public int hashCode(){
+            return (first.toString()+":"+second.toString()).hashCode();
+        }
+
+
     }
 
     static class FastReader {

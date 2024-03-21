@@ -1,13 +1,15 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+class CCStart126C {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +29,28 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        long arr[] = longArray(n, false);
+        Map<Long, Integer> map = new HashMap<>();
+        for(long x : arr) addToMap(x, map);
 
+        long ans = 0;
+        for(long x : arr){
+            if(x==3)
+            {
+                removeFromMap(x, map);
+                continue;
+            }
+            long y = x-3;
+            if(x%y == 0){
+                removeFromMap(x, map);
+                long z = x/y;
+                if(map.containsKey(z)){
+                    ans += map.get(z);
+                }
+            }
+        }
+        out.println(ans);
     }
 
 

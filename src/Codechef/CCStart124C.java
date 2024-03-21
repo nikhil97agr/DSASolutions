@@ -1,13 +1,15 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+class CCStart124C {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -18,18 +20,56 @@ public final class Template {
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            char ch[] = charArray();
+            int n = ch.length;
+            int ans = Integer.MAX_VALUE;
 
-            solve(out);
+            for(char c = 'a';c<='z';c++){
+                int cnt = 0;
+                for(char c1 : ch){
+                    cnt += c1==c?1:0;
+                }
+                if(cnt == 0) continue;
+                int start = 0;
+                int end = 0;
+                int temp = 0;
+                while(end < cnt){
+                    if(ch[end]==c){
+                        temp++;
+                    }
+                    end++;
+                }
+                while(end < n){
+                    ans = Math.min(ans, cnt - temp);
+                    if(ch[start]== c) temp--;
+                    if(ch[end]==c) temp++;
+                    end++;
+                    start++;
+                }
+                ans = Math.min(ans, cnt - temp);
+
+
+            }
+            out.println(ans);
+
+
+
         }
 
         out.flush();
         out.close();
     }
 
-    private static void solve(PrintWriter out){
+    static class Pair{
+        int first;
+        int sec;
 
+        public Pair(int first, int sec){
+            this.first = first;
+            this.sec = sec;
+
+        }
     }
-
 
     private static String[] stringArray(int n, boolean oneIndexed){
         int i=0;

@@ -1,91 +1,147 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public final class Template {
-    private final static long mod = (long)1e9+7;
-    private final static FastReader reader = new FastReader();
-    private final static String YES = "YES";
-    private final static String NO = "NO";
-
+public final class CF1927F {
+    private static long mod = (long)1e9+7;
+    private static FastReader reader = new FastReader();
     public static void main(String[] args) {
         PrintWriter out = new PrintWriter(System.out);
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            int n = read();
+            int m = read();
+            Edge edges[] = new Edge[m];
+            PriorityQueue<Edge> pq = new PriorityQueue<>();
+            for(int i=0;i<m;i++){
+                int src = read();
+                int dest = read();
+                int w = read();
 
-            solve(out);
+                edges[i] = new Edge(src, dest, w);
+            }
+
+            Result res = new Result();
+            int minWeight = Integer.MAX_VALUE;
+            Set<Integer> set = new HashSet<>();
+
+
+
+
+
+
+
         }
 
         out.flush();
         out.close();
     }
 
-    private static void solve(PrintWriter out){
 
+    public static long getArea(List<Integer> x, List<Integer> y){
+        int p1[] = {x.get(0), y.get(0)};
+        int p2[] = {x.get(1), y.get(1)};
+        int p3[] = {x.get(2), y.get(2)};
+        long ans = 0;
+        boolean isXAxis = false;
+        if(p1[0]==0 && p2[0]==0){
+            isXAxis = true;
+        }else if(p1[0] == 0 && p3[0]==0){
+            isXAxis = true;
+            int temp[] = p2;
+            p2 = p3;
+            p3 = temp;
+        }else if(p2[0]==0 && p3[0]==0){
+            int temp[] = p1;
+            p1 = p3;
+            p3 = p1;
+            isXAxis = true;
+        }else if(p1[1] == 0 && p3[1]==0){
+            int temp[] = p3;
+            p3 = p2;
+            p2 = temp;
+        }else if(p2[1]==0 && p3[1]==0){
+            int temp[] = p1;
+            p1 = p3;
+            p3 = temp;
+        }
+        if(isXAxis){
+            if(p3[1] <p2[1] && p3[1]<p1[1]){
+                int h1 = Math.max(p2[1], p1[1]) - p3[1];
+                int h2 = Math.abs(p1[1]-p2[1]);
+                ans = ((long) (h1 - h2) * p3[0])/2;
+            }else if(p3[1] >p2[1] && p3[1]>p1[1]){
+                int h1 = p3[1] - Math.min(p2[1], p1[1]);
+                int h2 = Math.abs(p1[1]- p2[1]);
+                ans = ((long)(h1-h2)*p3[0])/2;
+            }else{
+                ans = ((long)(Math.abs(p3[1] - p2[1]) + Math.abs(p3[1] - p1[1]))*p3[0])/2;
+            }
+        }else{
+            if(p3[0] <p2[0] && p3[0]<p1[0]){
+                int h1 = Math.max(p2[0], p1[0]) - p3[0];
+                int h2 = Math.abs(p1[0]-p2[0]);
+                ans = ((long) (h1 - h2) * p3[1])/2;
+            }else if(p3[0] >p2[0] && p3[0]>p1[0]){
+                int h1 = p3[0] - Math.min(p2[0], p1[0]);
+                int h2 = Math.abs(p1[0]- p2[0]);
+                ans = ((long)(h1-h2)*p3[1])/2;
+            }else{
+                ans = ((long)(Math.abs(p3[0] - p2[0]) + Math.abs(p3[0] - p1[0]))*p3[1])/2;
+            }
+        }
+        return ans;
     }
 
 
-    private static String[] stringArray(int n, boolean oneIndexed){
-        int i=0;
-        String s[] = new String[n];
-        if(oneIndexed){
-            i=1;
-            s = new String[n+1];
-            n++;
-        }
+    static class Result{
+        int minWeight;
+        Set<Integer> edges;
 
-        for(;i<n;i++){
+        public Result(){
+            minWeight = Integer.MAX_VALUE;
+            edges = new HashSet<>();
+        }
+    }
+
+    static class Edge{
+        int src;
+        int dest;
+        int weight;
+        public Edge(int src, int dest, int weight){
+            this.dest = dest;
+            this.weight = weight;
+            this.src = src;
+        }
+    }
+
+
+    private static String[] stringArray(int n){
+        String s[] = new String[n];
+        for(int i=0;i<n;i++){
             s[i] = reader.next();
         }
         return s;
     }
-
-    private static long readLong(){
-        return reader.nextLong();
-    }
-
-
-
-    private static int[] intArray(int n, boolean oneIndexed){
-        int i=0;
+    private static int[] intArray(int n){
         int arr[] = new int[n];
-        if(oneIndexed){
-            i = 1;
-            arr = new int[n+1];
-            n++;
-        }
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             arr[i] = reader.nextInt();
         }
         return arr;
     }
 
-    private static long[] longArray(int n, boolean oneIndexed){
+    private static long[] longArray(int n){
         long arr[] = new long[n];
-        int i =0;
-        if(oneIndexed){
-            i=1;
-            arr = new long[n+1];
-            n++;
-        }
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             arr[i] = reader.nextLong();
         }
         return arr;
-    }
-
-    private static char[] charArray(){
-        return readStr().toCharArray();
-    }
-
-    private static String readStr(){
-        return reader.next();
     }
     private static int read(){
         return reader.nextInt();
@@ -147,11 +203,12 @@ public final class Template {
         return gcd(b%a, a);
     }
 
-    private static int gcd(int a, int b) {
-        if (a == 0) return b;
+    private static int gcd(int a, int b){
+        if(a==0) return b;
 
-        return gcd(b % a, a);
+        return gcd(b%a,a);
     }
+
 
     private long multiplyMod(long a, long b){
         return (a*b)%mod;
@@ -159,6 +216,29 @@ public final class Template {
 
     private long addMod(long a, long b){
         return (a+b)%mod;
+    }
+
+    static class Pair<T>{
+        T first;
+        T second;
+
+        public Pair(T first, T second){
+            this.first = first;
+            this.second =second;
+        }
+
+        @Override
+        public boolean equals(Object ob){
+            Pair pair = (Pair)ob;
+            return this.first == pair.first && this.second == pair.second;
+        }
+
+        @Override
+        public int hashCode(){
+            return (first.toString()+":"+second.toString()).hashCode();
+        }
+
+
     }
 
     static class FastReader {

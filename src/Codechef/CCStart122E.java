@@ -1,80 +1,137 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public final class Template {
-    private final static long mod = (long)1e9+7;
-    private final static FastReader reader = new FastReader();
-    private final static String YES = "YES";
-    private final static String NO = "NO";
-
+class CCStart122E {
+    private static long mod = (long)1e9+7;
+    private static FastReader reader = new FastReader();
     public static void main(String[] args) {
         PrintWriter out = new PrintWriter(System.out);
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
 
-            solve(out);
+            int n = read();
+
+            Map<Integer, Node> map = new HashMap<>();
+            for(int i=0;i<n;i++){
+                long score = read();
+                map.put(i, new Node(score));
+            }
+
+            boolean visited[] = new boolean[n];
+            Map<Integer, List<Integer>> m2 = new HashMap<>();
+            for(int i=0;i<n-1;i++){
+                int u = read();
+                int v = read();
+                m2.computeIfAbsent(u-1, key -> new ArrayList<>()).add(v-1);
+                m2.computeIfAbsent(v-1, key -> new ArrayList<>()).add(u-1);
+            }
+
+            Queue<Integer> que = new LinkedList<>();
+
+            que.offer(0);
+            while(!que.isEmpty()){
+                int x = que.poll();
+                List<Integer> list = m2.get(x);
+                visited[x] = true;
+                for(int y : list){
+                    if(!visited[y]){
+
+                        que.offer(y);
+                        map.get(x).child.add(map.get(y));
+                    }
+                }
+            }
+
+            Arrays.fill(visited, false);
+            //First : same branch activated
+            //Second : no branch activated
+            List<Pair<Long>> score = new ArrayList<>();
+            for(Node node : map.get(0).child){
+                Pair<Long> p = dfs(node, 1);
+                score.add(p);
+            }
+            Map<Integer, Long> res = new HashMap<>();
+
         }
 
         out.flush();
         out.close();
     }
 
-    private static void solve(PrintWriter out){
+    private static Pair<Long> dfs(Node node, int steps){
+        if(node.child.isEmpty()){
+            if(steps == 1){
+                return new Pair<>(node.val - 1, node.val - 1);
+            }
+            return new Pair<>(node.val - (steps-1), node.val - steps);
+        }
+
+        List<Pair<Long>> list = new ArrayList<>();
+        Pair<Long> res = null;
+        if(steps == 1){
+            res = new Pair<>(node.val-1 , node.val - 1);
+        }else{
+            res = new Pair<>(node.val - (steps-1), node.val - steps);
+        }
+        for(Node child : node.child){
+            Pair<Long> pair = dfs(child, steps+1);
+            list.add(pair);
+        }
+
+        long sum1 = list.stream().filter(p -> p.first >0).map(p -> p.first).reduce(0L, Long::sum);
+        long sum2 = list.stream().filter(p -> p.second > 0).map(p -> p.second).reduce(0L, Long::sum);
+
+        res.first += sum1;
+        res.second += sum2;
+
+        return res;
+
+
 
     }
 
-
-    private static String[] stringArray(int n, boolean oneIndexed){
-        int i=0;
-        String s[] = new String[n];
-        if(oneIndexed){
-            i=1;
-            s = new String[n+1];
-            n++;
+    static class Node{
+        long val;
+        List<Node> child;
+        public Node(long val){
+            this.val = val;
+            child = new ArrayList<>();
         }
 
-        for(;i<n;i++){
+        @Override
+        public String toString() {
+            return "Node{" +
+                    "val=" + val +
+                    ", child=" + child +
+                    '}';
+        }
+    }
+
+
+    private static String[] stringArray(int n){
+        String s[] = new String[n];
+        for(int i=0;i<n;i++){
             s[i] = reader.next();
         }
         return s;
     }
-
-    private static long readLong(){
-        return reader.nextLong();
-    }
-
-
-
-    private static int[] intArray(int n, boolean oneIndexed){
-        int i=0;
+    private static int[] intArray(int n){
         int arr[] = new int[n];
-        if(oneIndexed){
-            i = 1;
-            arr = new int[n+1];
-            n++;
-        }
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             arr[i] = reader.nextInt();
         }
         return arr;
     }
 
-    private static long[] longArray(int n, boolean oneIndexed){
+    private static long[] longArray(int n){
         long arr[] = new long[n];
-        int i =0;
-        if(oneIndexed){
-            i=1;
-            arr = new long[n+1];
-            n++;
-        }
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             arr[i] = reader.nextLong();
         }
         return arr;
@@ -159,6 +216,62 @@ public final class Template {
 
     private long addMod(long a, long b){
         return (a+b)%mod;
+    }
+
+    static class Trie{
+        Trie trie[];
+        boolean isLast;
+        public Trie(){
+            trie = new Trie[256];
+        }
+
+        public void build(String str, int i, int n){
+            if(i == n){
+                this.isLast = true;
+                return;
+            }
+
+            char c = str.charAt(i);
+            if(trie[c]==null){
+                trie[c] = new Trie();
+            }
+
+            trie[c].build(str, i+1, n);
+        }
+
+        public boolean search(String str, int i, int n){
+            if(i==n){
+                return this.isLast;
+            }
+
+            char c = str.charAt(i);
+            if(trie[c] ==null) return false;
+            return trie[c].search(str, i+1, n);
+        }
+    }
+
+
+    static class Pair<T>{
+        T first;
+        T second;
+
+        public Pair(T first, T second){
+            this.first = first;
+            this.second =second;
+        }
+
+        @Override
+        public boolean equals(Object ob){
+            Pair pair = (Pair)ob;
+            return this.first.equals(pair.first) && this.second.equals(pair.second);
+        }
+
+        @Override
+        public int hashCode(){
+            return (first.toString()+":"+second.toString()).hashCode();
+        }
+
+
     }
 
     static class FastReader {

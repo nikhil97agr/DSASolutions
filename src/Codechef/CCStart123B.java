@@ -1,17 +1,18 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public final class Template {
-    private final static long mod = (long)1e9+7;
-    private final static FastReader reader = new FastReader();
-    private final static String YES = "YES";
-    private final static String NO = "NO";
+class CCStart123B {
+    private static long mod = (long)1e9+7;
+    private static FastReader reader = new FastReader();
+
+    private static String YES = "YES";
+
+    private static String NO = "NO";
 
     public static void main(String[] args) {
         PrintWriter out = new PrintWriter(System.out);
@@ -19,62 +20,88 @@ public final class Template {
         int test = reader.nextInt();
         while (test-- > 0) {
 
-            solve(out);
+            int n = read();
+            int q = read();
+            long arr[] =longArray(n);
+            Map<Long, Set<Pair>> map = new HashMap<>();
+            long sum = Arrays.stream(arr).sum();
+            sum += sum;
+            for(int i=0;i<n;i++){
+                for(int j=i+1;j<n;j++){
+                    Pair pair = new Pair(i, j);
+                    long temp = sum - arr[i] - arr[j];
+                    map.computeIfAbsent(temp, s -> new HashSet<>()).add(pair);
+                }
+            }
+
+            while(q-- > 0){
+                long x = read();
+                if(!map.containsKey(x)){
+                    out.println(-1);
+                }else{
+                    Pair pair = null;
+                    for(Pair p : map.get(x)){
+                        pair = p;
+                        break;
+                    }
+                    out.print(arr[pair.first]+" ");
+                    for(int i=0;i<n;i++){
+                        if(i!= pair.first && i != pair.second){
+                            out.print(arr[i]+" ");
+                        }
+                    }
+                    out.println(arr[pair.second]);
+                }
+            }
+
         }
 
         out.flush();
         out.close();
     }
 
-    private static void solve(PrintWriter out){
+    static class Pair{
+        int first;
+        int second;
+        public Pair(int first, int second){
+            this.first = first;
+            this.second = second;
 
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Pair pair = (Pair) o;
+            return first == pair.first && second == pair.second;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(first, second);
+        }
     }
 
 
-    private static String[] stringArray(int n, boolean oneIndexed){
-        int i=0;
+    private static String[] stringArray(int n){
         String s[] = new String[n];
-        if(oneIndexed){
-            i=1;
-            s = new String[n+1];
-            n++;
-        }
-
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             s[i] = reader.next();
         }
         return s;
     }
-
-    private static long readLong(){
-        return reader.nextLong();
-    }
-
-
-
-    private static int[] intArray(int n, boolean oneIndexed){
-        int i=0;
+    private static int[] intArray(int n){
         int arr[] = new int[n];
-        if(oneIndexed){
-            i = 1;
-            arr = new int[n+1];
-            n++;
-        }
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             arr[i] = reader.nextInt();
         }
         return arr;
     }
 
-    private static long[] longArray(int n, boolean oneIndexed){
+    private static long[] longArray(int n){
         long arr[] = new long[n];
-        int i =0;
-        if(oneIndexed){
-            i=1;
-            arr = new long[n+1];
-            n++;
-        }
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             arr[i] = reader.nextLong();
         }
         return arr;

@@ -1,13 +1,13 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.util.Map.Entry;
 
-public final class Template {
+public final class CF1935C {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -18,18 +18,48 @@ public final class Template {
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            int n = read();
+            long l = readLong();
+            Pair pair[] = new Pair[n];
+            for(int i=0;i<n;i++){
+                pair[i] = new Pair(readLong(), readLong());
 
-            solve(out);
+            }
+            int ans = 0;
+            Arrays.sort(pair, Comparator.comparingLong(a -> a.b));
+            for(int i=0;i<n;i++){
+                long sum = 0;
+                PriorityQueue<Long> que = new PriorityQueue<>(Collections.reverseOrder());
+                for(int j=i;j<n;j++){
+                    sum += pair[j].a;
+                    que.offer(pair[j].a);
+
+                    while(!que.isEmpty() && sum + (pair[j].b - pair[i].b) > l){
+                        sum -= que.poll();
+                    }
+
+                    ans = max(ans, que.size());
+                }
+            }
+            out.println(ans);
+
+
+
+
         }
 
         out.flush();
         out.close();
     }
 
-    private static void solve(PrintWriter out){
-
+    static class Pair{
+        long a;
+        long b;
+        public Pair(long a, long b){
+            this.a = a;
+            this.b = b;
+        }
     }
-
 
     private static String[] stringArray(int n, boolean oneIndexed){
         int i=0;

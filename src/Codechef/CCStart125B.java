@@ -1,13 +1,14 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+class CCStart125B {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -18,17 +19,53 @@ public final class Template {
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            int n= read();
+            int k =read();
+            char arr[] = charArray();
+            int cnt = 0;
+            for(char c : arr){
+                if(c=='1') cnt++;
+            }
 
-            solve(out);
+            for(int i=0;i<n;i++){
+                if(k==0) break;
+                if(arr[i] == '1'){
+                    if(cnt <= k){
+                        for(int j=i;j<n;j++){
+                            if(arr[j] == '1'){
+                                arr[j] = ' ';
+                            }
+                        }
+                        k -= cnt;
+                        break;
+                    }
+                    arr[i] = '0';
+                    cnt--;
+                    k--;
+                }
+            }
+
+            for(int i=0;i<n;i++){
+                if(k==0 ) break;
+                if(arr[i] != ' '){
+                    arr[i] = ' ';
+                    k--;
+                }
+            }
+
+            for(char c : arr){
+                if(c!= ' '){
+                    out.print(c);
+                }
+            }
+            out.println();
+
         }
 
         out.flush();
         out.close();
     }
 
-    private static void solve(PrintWriter out){
-
-    }
 
 
     private static String[] stringArray(int n, boolean oneIndexed){

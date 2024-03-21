@@ -1,80 +1,90 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public final class Template {
-    private final static long mod = (long)1e9+7;
-    private final static FastReader reader = new FastReader();
-    private final static String YES = "YES";
-    private final static String NO = "NO";
+public final class CF1934D {
+    private static long mod = (long)1e9+7;
+    private static FastReader reader = new FastReader();
+
+    private static String YES = "YES";
+
+    private static String NO = "NO";
 
     public static void main(String[] args) {
         PrintWriter out = new PrintWriter(System.out);
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            long x = reader.nextLong();
+            long m = reader.nextLong();
 
-            solve(out);
+            List<Long> res = new ArrayList<>(64);
+            res.add(x);
+            boolean possible = true;
+            out.println();
+            long bitX[] = new long[61];
+            long bitM[] = new long[61];
+            int ind = 0;
+            long temp = x;
+            while(x >0)
+            {
+                long mod = x%2;
+                bitX[ind++] = mod;
+                x/=2;
+            }
+            x = temp;
+            ind = 0;
+            while(m >0){
+                long mod = m%2;
+                bitM[ind++] = mod;
+                m/=2;
+            }
+            System.out.println(Arrays.toString(bitX));
+            System.out.println(Arrays.toString(bitM));
+            while(!Arrays.equals(bitX, bitM) && res.size() <=64){
+                ind = bitX.length - 1;
+                
+            }
+
+            if(res.size() >64 || !possible){
+                out.println(-1);
+            }else{
+                out.println(res.size()-1);
+                for(long y : res){
+                    out.print(y+" ");
+                }
+                out.println();
+            }
+
         }
 
         out.flush();
         out.close();
     }
 
-    private static void solve(PrintWriter out){
 
-    }
-
-
-    private static String[] stringArray(int n, boolean oneIndexed){
-        int i=0;
+    private static String[] stringArray(int n){
         String s[] = new String[n];
-        if(oneIndexed){
-            i=1;
-            s = new String[n+1];
-            n++;
-        }
-
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             s[i] = reader.next();
         }
         return s;
     }
-
-    private static long readLong(){
-        return reader.nextLong();
-    }
-
-
-
-    private static int[] intArray(int n, boolean oneIndexed){
-        int i=0;
+    private static int[] intArray(int n){
         int arr[] = new int[n];
-        if(oneIndexed){
-            i = 1;
-            arr = new int[n+1];
-            n++;
-        }
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             arr[i] = reader.nextInt();
         }
         return arr;
     }
 
-    private static long[] longArray(int n, boolean oneIndexed){
+    private static long[] longArray(int n){
         long arr[] = new long[n];
-        int i =0;
-        if(oneIndexed){
-            i=1;
-            arr = new long[n+1];
-            n++;
-        }
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             arr[i] = reader.nextLong();
         }
         return arr;

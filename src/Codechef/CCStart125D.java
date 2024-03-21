@@ -1,34 +1,82 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public final class Template {
+class CCStart125D {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
-    private final static String YES = "YES";
-    private final static String NO = "NO";
+    private final static String ALICE = "Alice";
+    private final static String BOB = "Bob";
+
+    private final static String DRAW = "Draw";
 
     public static void main(String[] args) {
         PrintWriter out = new PrintWriter(System.out);
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            int n =read();
+            long arr[] =  longArray(n, false);
 
-            solve(out);
+            int alice = 0;
+            int bob = 0;
+            PriorityQueue<Long> que = new PriorityQueue<>(Collections.reverseOrder());
+            String turn = ALICE;
+            for(int i=0;i<n;i++){
+                if(arr[i] == 1){
+                    if(turn.equals(ALICE)){
+                        alice++;
+                        arr[i] = 0;
+                        turn = BOB;
+                    }else{
+                        bob++;
+                        turn = ALICE;
+                        arr[i] = 0;
+                    }
+                }else{
+                    que.offer(arr[i]);
+                }
+            }
+
+            while(!que.isEmpty()){
+                if(que.peek() == 2){
+                    if(turn.equals(ALICE)){
+                        bob++;
+                    }else{
+                        alice++;
+                    }
+                    que.poll();
+                }else{
+                    long x =que.poll();
+                    if(x%2==1){
+                        if(turn.equals(ALICE)){
+                            turn = BOB;
+                        }else{
+                            turn = ALICE;
+                        }
+                    }
+                    que.offer(2L);
+                }
+            }
+
+            if(alice > bob){
+                out.println(ALICE);
+            }else if(bob > alice){
+                out.println(BOB);
+            }else{
+                out.println(DRAW);
+            }
+
         }
 
         out.flush();
         out.close();
     }
 
-    private static void solve(PrintWriter out){
-
-    }
 
 
     private static String[] stringArray(int n, boolean oneIndexed){

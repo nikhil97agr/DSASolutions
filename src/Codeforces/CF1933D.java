@@ -1,80 +1,84 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
-    private final static long mod = (long)1e9+7;
-    private final static FastReader reader = new FastReader();
-    private final static String YES = "YES";
-    private final static String NO = "NO";
+public final class CF1933D {
+    private static long mod = (long)1e9+7;
 
+    private static String YES = "YES";
+
+    private static String NO = "NO";
+    private static FastReader reader = new FastReader();
     public static void main(String[] args) {
         PrintWriter out = new PrintWriter(System.out);
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            int n = read();
+            int arr[] = intArray(n);
+            boolean found = false;
+            int min = Arrays.stream(arr).min().orElse(-1);
+            int cnt = 0;
+            for(int i=0;i<n;i++){
+                if(arr[i] == min){
+                    cnt++;
+                }
+            }
+            if(cnt == 1){
+                out.println(YES);
+                continue;
+            }
 
-            solve(out);
+            if(min==1){
+                out.println(NO);
+                continue;
+            }
+
+            for(int i=0;i<n;i++){
+                if(arr[i]%min!=0){
+                    found = true;
+                    break;
+                }
+            }
+            if(found){
+                out.println(YES);
+            }else{
+                out.println(NO);
+            }
+
+
+
         }
 
         out.flush();
         out.close();
     }
 
-    private static void solve(PrintWriter out){
 
-    }
-
-
-    private static String[] stringArray(int n, boolean oneIndexed){
-        int i=0;
+    private static String[] stringArray(int n){
         String s[] = new String[n];
-        if(oneIndexed){
-            i=1;
-            s = new String[n+1];
-            n++;
-        }
-
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             s[i] = reader.next();
         }
         return s;
     }
-
-    private static long readLong(){
-        return reader.nextLong();
-    }
-
-
-
-    private static int[] intArray(int n, boolean oneIndexed){
-        int i=0;
+    private static int[] intArray(int n){
         int arr[] = new int[n];
-        if(oneIndexed){
-            i = 1;
-            arr = new int[n+1];
-            n++;
-        }
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             arr[i] = reader.nextInt();
         }
         return arr;
     }
 
-    private static long[] longArray(int n, boolean oneIndexed){
+    private static long[] longArray(int n){
         long arr[] = new long[n];
-        int i =0;
-        if(oneIndexed){
-            i=1;
-            arr = new long[n+1];
-            n++;
-        }
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             arr[i] = reader.nextLong();
         }
         return arr;
@@ -159,6 +163,62 @@ public final class Template {
 
     private long addMod(long a, long b){
         return (a+b)%mod;
+    }
+
+    static class Trie{
+        Trie trie[];
+        boolean isLast;
+        public Trie(){
+            trie = new Trie[256];
+        }
+
+        public void build(String str, int i, int n){
+            if(i == n){
+                this.isLast = true;
+                return;
+            }
+
+            char c = str.charAt(i);
+            if(trie[c]==null){
+                trie[c] = new Trie();
+            }
+
+            trie[c].build(str, i+1, n);
+        }
+
+        public boolean search(String str, int i, int n){
+            if(i==n){
+                return this.isLast;
+            }
+
+            char c = str.charAt(i);
+            if(trie[c] ==null) return false;
+            return trie[c].search(str, i+1, n);
+        }
+    }
+
+
+    static class Pair<T>{
+        T first;
+        T second;
+
+        public Pair(T first, T second){
+            this.first = first;
+            this.second =second;
+        }
+
+        @Override
+        public boolean equals(Object ob){
+            Pair pair = (Pair)ob;
+            return this.first.equals(pair.first) && this.second.equals(pair.second);
+        }
+
+        @Override
+        public int hashCode(){
+            return (first.toString()+":"+second.toString()).hashCode();
+        }
+
+
     }
 
     static class FastReader {

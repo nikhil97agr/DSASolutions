@@ -1,91 +1,87 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
-    private final static long mod = (long)1e9+7;
-    private final static FastReader reader = new FastReader();
-    private final static String YES = "YES";
-    private final static String NO = "NO";
-
+public final class CF1927E {
+    private static long mod = (long)1e9+7;
+    private static FastReader reader = new FastReader();
     public static void main(String[] args) {
         PrintWriter out = new PrintWriter(System.out);
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            int n = read();
+            int k = read();
+            int res[] = new int[n];
+            int ind = 0;
+            boolean back = true;
+            int start = 1;
+            int end = n;
+            while(ind < n){
+                if(res[ind]!= 0){
+                    ind++;
+                    continue;
+                }
 
-            solve(out);
+                int curr = ind;
+                while(curr < n){
+                    if(back){
+                        res[curr] = end;
+                        end--;
+                    }else{
+                        res[curr] = start;
+                        start++;
+                    }
+                    curr += k;
+                }
+
+                ind++;
+                if(back){
+                    back =false;
+                }else{
+                    back = true;
+                }
+            }
+
+            for(int x : res){
+                out.print(x+" ");
+            }
+            out.println();
+
         }
 
         out.flush();
         out.close();
     }
 
-    private static void solve(PrintWriter out){
 
-    }
-
-
-    private static String[] stringArray(int n, boolean oneIndexed){
-        int i=0;
+    private static String[] stringArray(int n){
         String s[] = new String[n];
-        if(oneIndexed){
-            i=1;
-            s = new String[n+1];
-            n++;
-        }
-
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             s[i] = reader.next();
         }
         return s;
     }
-
-    private static long readLong(){
-        return reader.nextLong();
-    }
-
-
-
-    private static int[] intArray(int n, boolean oneIndexed){
-        int i=0;
+    private static int[] intArray(int n){
         int arr[] = new int[n];
-        if(oneIndexed){
-            i = 1;
-            arr = new int[n+1];
-            n++;
-        }
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             arr[i] = reader.nextInt();
         }
         return arr;
     }
 
-    private static long[] longArray(int n, boolean oneIndexed){
+    private static long[] longArray(int n){
         long arr[] = new long[n];
-        int i =0;
-        if(oneIndexed){
-            i=1;
-            arr = new long[n+1];
-            n++;
-        }
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             arr[i] = reader.nextLong();
         }
         return arr;
-    }
-
-    private static char[] charArray(){
-        return readStr().toCharArray();
-    }
-
-    private static String readStr(){
-        return reader.next();
     }
     private static int read(){
         return reader.nextInt();
@@ -147,11 +143,12 @@ public final class Template {
         return gcd(b%a, a);
     }
 
-    private static int gcd(int a, int b) {
-        if (a == 0) return b;
+    private static int gcd(int a, int b){
+        if(a==0) return b;
 
-        return gcd(b % a, a);
+        return gcd(b%a,a);
     }
+
 
     private long multiplyMod(long a, long b){
         return (a*b)%mod;
@@ -159,6 +156,29 @@ public final class Template {
 
     private long addMod(long a, long b){
         return (a+b)%mod;
+    }
+
+    static class Pair<T>{
+        T first;
+        T second;
+
+        public Pair(T first, T second){
+            this.first = first;
+            this.second =second;
+        }
+
+        @Override
+        public boolean equals(Object ob){
+            Pair pair = (Pair)ob;
+            return this.first == pair.first && this.second == pair.second;
+        }
+
+        @Override
+        public int hashCode(){
+            return (first.toString()+":"+second.toString()).hashCode();
+        }
+
+
     }
 
     static class FastReader {

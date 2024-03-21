@@ -1,80 +1,82 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
-    private final static long mod = (long)1e9+7;
-    private final static FastReader reader = new FastReader();
-    private final static String YES = "YES";
-    private final static String NO = "NO";
+public final class CF1931E {
+    private static long mod = (long)1e9+7;
+    private static FastReader reader = new FastReader();
+
+    private static String YES = "Sasha";
+
+    private static String NO = "Anna";
 
     public static void main(String[] args) {
         PrintWriter out = new PrintWriter(System.out);
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            int n = read();
+            int m = read();
+            String arr[] = new String[n];
+            int cnt[] = new int[n];
+            for(int i=0;i<n;i++){
+                arr[i] = readStr();
+                for(int j=arr[i].length()-1;j>=0 && arr[i].charAt(j)=='0';j--){
+                    cnt[i]++;
+                }
+            }
+            int sum = 0;
+            for(int i=0;i<n;i++) sum += (arr[i].length() - cnt[i]);
+            Arrays.sort(cnt);
 
-            solve(out);
+            for(int i=0;i<n;i++){
+                if(i%2==1){
+                    sum += cnt[n-1-i];
+                }
+            }
+            if(sum > m){
+                out.println(YES);
+            }else{
+                out.println(NO);
+            }
+
+
+
+
+
+
         }
 
         out.flush();
         out.close();
     }
 
-    private static void solve(PrintWriter out){
 
-    }
-
-
-    private static String[] stringArray(int n, boolean oneIndexed){
-        int i=0;
+    private static String[] stringArray(int n){
         String s[] = new String[n];
-        if(oneIndexed){
-            i=1;
-            s = new String[n+1];
-            n++;
-        }
-
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             s[i] = reader.next();
         }
         return s;
     }
-
-    private static long readLong(){
-        return reader.nextLong();
-    }
-
-
-
-    private static int[] intArray(int n, boolean oneIndexed){
-        int i=0;
+    private static int[] intArray(int n){
         int arr[] = new int[n];
-        if(oneIndexed){
-            i = 1;
-            arr = new int[n+1];
-            n++;
-        }
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             arr[i] = reader.nextInt();
         }
         return arr;
     }
 
-    private static long[] longArray(int n, boolean oneIndexed){
+    private static long[] longArray(int n){
         long arr[] = new long[n];
-        int i =0;
-        if(oneIndexed){
-            i=1;
-            arr = new long[n+1];
-            n++;
-        }
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             arr[i] = reader.nextLong();
         }
         return arr;

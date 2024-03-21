@@ -1,80 +1,164 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
-    private final static long mod = (long)1e9+7;
-    private final static FastReader reader = new FastReader();
-    private final static String YES = "YES";
-    private final static String NO = "NO";
+public final class CF1934C {
+    private static long mod = (long)1e9+7;
+    private static FastReader reader = new FastReader();
+
+    private static String YES = "YES";
+
+    private static String NO = "NO";
 
     public static void main(String[] args) {
         PrintWriter out = new PrintWriter(System.out);
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            long n = read();
+            long m = read();
 
-            solve(out);
+            long topLeft = query(1,1);
+
+            if(topLeft ==0){
+                answer(1,1);
+                continue;
+            }
+
+            long topRight = 0;
+            long bottomRight = 0;
+            long x1 = 0;
+            long y1= 0;
+            long x2 = 0;
+            long y2= 0;
+            if(topLeft +1 <= m){
+
+              x1 = 1;
+              y1 = topLeft +1;
+              topRight = query(x1, y1);
+              if(topRight==0){
+                  answer(x1,y1);
+                  continue;
+              }
+            }else{
+
+                x1 =1+ topLeft - (m-1);
+                y1 = m;
+                topRight = query(x1, y1);
+                if(topRight ==0){
+                    answer(x1, y1);
+                    continue;
+                }
+            }
+
+            if(topLeft +1 <= n){
+                x2 = topLeft +1;
+                y2 = 1;
+                bottomRight = query(x2, y2);
+                if(bottomRight == 0){
+                    answer(x2, y2);
+                    continue;
+                }
+            }else{
+                x2 = n;
+                y2 = 1+topLeft - (n-1);
+                bottomRight = query(x2, y2);
+                if(bottomRight==0){
+                    answer(x2, y2);
+                    continue;
+                }
+            }
+
+            if(topRight == bottomRight){
+                long half = topRight/2;
+                long ans = query(x1+half, y1-half);
+                if(ans ==0){
+                    answer(x1+half, y1-half);
+                }else{
+                    answer(x2-half, y2+half);
+                }
+                continue;
+
+            }
+            if(topRight > bottomRight){
+                if(topRight%2==0){
+                    long half = topRight/2;
+                    long temp = query(x1 + half, y1 - half);
+                    if(temp ==0)
+                        answer(x1 + half, y1 - half);
+                    else{
+                        half = bottomRight /2;
+                        answer(x2 - half, y2 + half);
+                    }
+                }else{
+                    long half = bottomRight /2;
+                    answer(x2 - half, y2 + half);
+
+                }
+            }else{
+                if(bottomRight%2==0){
+                    long half = bottomRight/2;
+                    long temp = query(x2 - half, y2 + half);
+                    if(temp == 0)
+                    answer(x2 - half, y2+ half);
+                    else{
+                        half = topRight/2;
+                        answer(x1 + half, y1 - half);
+                    }
+                }else{
+                    long half = topRight/ 2;
+                    answer(x1 + half, y1- half);
+                }
+            }
+
+
+
+
+
+
+
         }
 
         out.flush();
         out.close();
     }
 
-    private static void solve(PrintWriter out){
+    private static void answer(long x, long y){
+        System.out.println("! "+x+" "+y);
+        System.out.flush();
 
     }
 
+    private static long query(long x, long y){
+        System.out.println("? "+x+" "+y);
+        System.out.flush();
+        return read();
+    }
 
-    private static String[] stringArray(int n, boolean oneIndexed){
-        int i=0;
+    private static String[] stringArray(int n){
         String s[] = new String[n];
-        if(oneIndexed){
-            i=1;
-            s = new String[n+1];
-            n++;
-        }
-
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             s[i] = reader.next();
         }
         return s;
     }
-
-    private static long readLong(){
-        return reader.nextLong();
-    }
-
-
-
-    private static int[] intArray(int n, boolean oneIndexed){
-        int i=0;
+    private static int[] intArray(int n){
         int arr[] = new int[n];
-        if(oneIndexed){
-            i = 1;
-            arr = new int[n+1];
-            n++;
-        }
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             arr[i] = reader.nextInt();
         }
         return arr;
     }
 
-    private static long[] longArray(int n, boolean oneIndexed){
+    private static long[] longArray(int n){
         long arr[] = new long[n];
-        int i =0;
-        if(oneIndexed){
-            i=1;
-            arr = new long[n+1];
-            n++;
-        }
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             arr[i] = reader.nextLong();
         }
         return arr;

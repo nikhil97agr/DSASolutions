@@ -1,13 +1,12 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public final class Template {
+public final class CF1941D {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -18,18 +17,93 @@ public final class Template {
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            int n = read();
+            int m = read();
+            int x = read();
+            boolean dp[][] = new boolean[n+1][m+1];
+            dp[x][0] = true;
 
-            solve(out);
+            Queue<int[] > que = new ArrayDeque<>();
+            que.offer(new int[]{x,0});
+            Query[] query = new Query[m];
+            for(int i=0;i<m;i++){
+                query[i] = new Query(read(), reader.next());
+            }
+            while(!que.isEmpty()){
+                int ele[] = que.poll();
+
+                int num = ele[0];
+                int ind = ele[1];
+
+                if(ind == m ){
+                    continue;
+                }
+                dp[num][ind] = true;
+                int next = ind+1;
+                int step = query[ind].s;
+                int clock   = 0;
+                if(step + num <= n){
+                    clock = step + num;
+                }else{
+                    clock = ( num + step - n);
+                }
+
+                int anti  = 0;
+                if(step <num){
+                    anti = num - step;
+                }else{
+                    anti = n - (step - num);
+                }
+                if(query[ind].c.equals("?")){
+                    if(!dp[anti][next]){
+                        dp[anti][next] = true;
+                        que.offer(new int[]{anti, next});
+
+                    }
+                    if(!dp[clock][next]){
+                        dp[clock][next] = true;
+                        que.offer(new int[]{clock, next});
+                    }
+                }else if(query[ind].c.equals("0")){
+                    if(!dp[clock][next]){
+                        dp[clock][next] = true;
+                        que.offer(new int[]{clock, next});
+                    }
+                }else{
+                    if(!dp[anti][next]){
+                        dp[anti][next] = true;
+                        que.offer(new int[]{anti, next});
+
+                    }
+                }
+            }
+            int ans = 0;
+            for(int i=1 ;i<=n;i++){
+                if(dp[i][m]){
+                    ans++;
+                }
+            }
+            out.println(ans);
+            for(int i=1;i<=n;i++){
+                if(dp[i][m]){
+                    out.print(i+" ");
+                }
+            }
+            out.println();
         }
 
         out.flush();
         out.close();
     }
 
-    private static void solve(PrintWriter out){
-
+    static class Query{
+        int s;
+        String c;
+        public Query(int s, String c){
+            this.s = s;
+            this.c = c;
+        }
     }
-
 
     private static String[] stringArray(int n, boolean oneIndexed){
         int i=0;

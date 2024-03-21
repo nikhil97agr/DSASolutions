@@ -1,13 +1,14 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+class CCStart125C {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -18,16 +19,40 @@ public final class Template {
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            int n = read();
+            long a[] = longArray(n, true);
+            long b[] = longArray(n, true);
+            boolean res = true;
+            for(int i=2;i<=n-2;i++){
+                if(b[i-1] == a[i-1]) continue;
+                long diff = b[i-1] - a[i-1];
+                if(a[i] + a[i+1] == diff){
+                    a[i-1] = b[i-1];
+                    long temp = a[i];
+                    a[i+2]+= a[i] + a[i+1];
+                    a[i] = -a[i+1];
+                    a[i+1] = -temp;
 
-            solve(out);
+                }else{
+                    res = false;
+                    break;
+                }
+            }
+
+            if(!res){
+                out.println(NO);
+            }else{
+                if(a[n] == b[n] && a[n-1] == b[n-1] && a[n-2] == b[n-2]){
+                    out.println(YES);
+                }else{
+                    out.println(NO);
+                }
+            }
+
         }
 
         out.flush();
         out.close();
-    }
-
-    private static void solve(PrintWriter out){
-
     }
 
 

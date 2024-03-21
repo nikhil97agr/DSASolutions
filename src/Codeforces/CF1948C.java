@@ -1,13 +1,12 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public final class Template {
+public final class CF1948C {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +26,49 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n =read();
+        char arr[][]= new char[2][];
+        arr[0] = charArray();
+        arr[1] = charArray();
 
+        Queue<int[]> que = new LinkedList<>();
+        boolean visited[][] = new boolean[2][n];
+
+        que.offer(new int[]{0,0});
+        visited[0][0] = true;
+        while(!que.isEmpty()){
+            int cell[] = que.poll();
+
+            if(cell[0] ==1 && cell[1] == n-1) {
+                out.println(YES);
+                return;
+            }
+
+            int dir[] = new int[]{0, 1, 0, -1, 0};
+
+            for(int i=0;i<4;i++){
+                int x = cell[0] + dir[i];
+                int y = cell[1] + dir[i+1];
+
+                if(x>=0 && x < 2 && y>=0 && y<n && !visited[x][y]){
+
+                    if(arr[x][y] == '>'){
+                        y++;
+                        if(!visited[x][y]){
+                            visited[x][y] = true;
+                            que.offer(new int[]{x,y});
+                        }
+                    }else{
+                        y--;
+                        if(!visited[x][y]){
+                            visited[x][y] = true;
+                            que.offer(new int[]{x,y});
+                        }
+                    }
+                }
+            }
+        }
+        out.println(NO);
     }
 
 

@@ -1,13 +1,14 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+public final class CF1941C {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -18,16 +19,42 @@ public final class Template {
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            int n = read();
+            char ch[] = charArray();
 
-            solve(out);
+            if(n < 3){
+                out.println(0);
+                continue;
+            }
+
+            int cnt = 0;
+            for(int i=0;i<n;i++){
+                if(ch[i] == 'p'){
+                    boolean map = false;
+                    boolean pie = false;
+
+                    if(i-2 >=0){
+                        if(ch[i-1] == 'a' && ch[i-2] == 'm'){
+                            map = true;
+                        }
+                    }
+                    if(i+2 < n){
+                        if(ch[i+1] == 'i' && ch[i+2] == 'e'){
+                            pie = true;
+                        }
+                    }
+
+                    if(map|| pie){
+                        cnt++;
+                    }
+                }
+            }
+            out.println(cnt);
+
         }
 
         out.flush();
         out.close();
-    }
-
-    private static void solve(PrintWriter out){
-
     }
 
 

@@ -1,33 +1,42 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+class CCStart124A {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
-    private final static String YES = "YES";
-    private final static String NO = "NO";
+    private final static String YES = "EVEN";
+    private final static String NO = "ODD";
 
     public static void main(String[] args) {
         PrintWriter out = new PrintWriter(System.out);
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            int sum = 0;
+            int n = read();
+            while( n > 0){
+                int dig = n%2;
+                sum += dig;
+                n/=2;
+            }
 
-            solve(out);
+            if(sum%2==0){
+                out.println(YES);
+            }else{
+                out.println(NO);
+            }
+
         }
 
         out.flush();
         out.close();
-    }
-
-    private static void solve(PrintWriter out){
-
     }
 
 

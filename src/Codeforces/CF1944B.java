@@ -1,13 +1,15 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+public final class CF1944B {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,6 +29,52 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        int k = read();
+        int arr[] = intArray(2*n, false);
+
+        int c1[] = new int[n+1];
+        int c2[] = new int[n+1];
+        for(int i=0;i<n;i++){
+            c1[arr[i]]++;
+            c2[arr[i+n]]++;
+        }
+        int l[] = new int[2*k];
+        int r[] = new int[2*k];
+
+        int i=0;
+        int j=0;
+        int x=1;
+        while(x <= n && (i < l.length || j < r.length)){
+            if(c1[x] >1 && i < l.length){
+                l[i] = l[i+1] = x;
+                i+=2;
+            }
+
+            if(c2[x] > 1 && j < r.length){
+                r[j] = r[j+1] = x;
+                j+=2;
+            }
+            x++;
+        }
+        x=1;
+        while(x <= n && i < l.length && j < r.length){
+            if(c1[x] == 1){
+                l[i] = r[j] = x;
+                i++;
+                j++;
+            }
+            x++;
+        }
+
+        for(int y : l){
+            out.print(y+" ");
+        }
+        out.println();
+        for(int y : r){
+            out.print(y+" ");
+        }
+        out.println();
 
     }
 

@@ -1,17 +1,18 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public final class Template {
-    private final static long mod = (long)1e9+7;
-    private final static FastReader reader = new FastReader();
-    private final static String YES = "YES";
-    private final static String NO = "NO";
+public final class CF1931D {
+    private static long mod = (long)1e9+7;
+    private static FastReader reader = new FastReader();
+
+    private static String YES = "YES";
+
+    private static String NO = "NO";
 
     public static void main(String[] args) {
         PrintWriter out = new PrintWriter(System.out);
@@ -19,62 +20,101 @@ public final class Template {
         int test = reader.nextInt();
         while (test-- > 0) {
 
-            solve(out);
+            Map<Pair, Integer> map = new HashMap<>();
+
+
+            int n = read();
+            long x = read();
+            long y = read();
+            long arr[] = longArray(n);
+
+            for(int i=0;i<n;i++){
+                long md1 = arr[i]%x;
+                long md2 = arr[i]%y;
+                Pair pair = new Pair(md1, md2);
+                map.put(pair, map.getOrDefault(pair, 0)+1);
+            }
+//            for(int i=0;i<n;i++){
+//                for(int j=i+1;j<n;j++){
+//                    long sum = arr[i] + arr[j];
+//                    long diff = arr[i] - arr[j];
+//                    if(sum%x==0 && diff%y==0){
+//                        out.println(arr[i]+":"+arr[j]);
+//                    }
+//                }
+//            }
+//            System.out.println(map);
+            long ans = 0;
+            for(int i=0;i<n;i++){
+                long m1 = (x - arr[i]%x)%x;
+                long m2 = arr[i]%y;
+
+                Pair pair = new Pair(arr[i]%x, arr[i]%y);
+                map.put(pair, map.get(pair)-1);
+                if(map.get(pair)==0){
+                    map.remove(pair);
+                }
+                pair = new Pair(m1, m2);
+//                System.out.println(pair+":"+arr[i]);
+                ans += map.getOrDefault(pair, 0);
+            }
+            out.println(ans);
         }
 
         out.flush();
         out.close();
     }
 
-    private static void solve(PrintWriter out){
+    static class Pair{
+        long first;
+        long second;
 
+        public Pair(long first, long second) {
+            this.first = first;
+            this.second = second;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Pair pair = (Pair) o;
+            return first == pair.first && second == pair.second;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(first, second);
+        }
+
+        @Override
+        public String toString() {
+            return "Pair{" +
+                    "first=" + first +
+                    ", second=" + second +
+                    '}';
+        }
     }
 
 
-    private static String[] stringArray(int n, boolean oneIndexed){
-        int i=0;
+    private static String[] stringArray(int n){
         String s[] = new String[n];
-        if(oneIndexed){
-            i=1;
-            s = new String[n+1];
-            n++;
-        }
-
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             s[i] = reader.next();
         }
         return s;
     }
-
-    private static long readLong(){
-        return reader.nextLong();
-    }
-
-
-
-    private static int[] intArray(int n, boolean oneIndexed){
-        int i=0;
+    private static int[] intArray(int n){
         int arr[] = new int[n];
-        if(oneIndexed){
-            i = 1;
-            arr = new int[n+1];
-            n++;
-        }
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             arr[i] = reader.nextInt();
         }
         return arr;
     }
 
-    private static long[] longArray(int n, boolean oneIndexed){
+    private static long[] longArray(int n){
         long arr[] = new long[n];
-        int i =0;
-        if(oneIndexed){
-            i=1;
-            arr = new long[n+1];
-            n++;
-        }
-        for(;i<n;i++){
+        for(int i=0;i<n;i++){
             arr[i] = reader.nextLong();
         }
         return arr;

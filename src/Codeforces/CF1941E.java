@@ -1,13 +1,15 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 
-public final class Template {
+public final class CF1941E {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -18,16 +20,60 @@ public final class Template {
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
+            int n = read();
+            int m = read();
+            int k = read();
+            int d = read();
+            long res [] = new long[n];
+            for(int i=0;i<n;i++){
+                long arr[] = longArray(m, false);
+                TreeMap<Long, Integer> map = new TreeMap<>();
 
-            solve(out);
+                map.put(1L,1);
+                int start = 0;
+                int end= 1;
+                long dp[] = new long[m];
+                dp[0] = 1;
+                while(end < m){
+                    while(end - start -1 > d){
+                        removeFromMap(dp[start], map);
+                        start++;
+                    }
+                    dp[end] += map.firstKey()+ arr[end]+1;
+                    addToMap(dp[end], map);
+                    end++;
+
+                }
+                res[i] = dp[m-1];
+            }
+
+            long ans = Long.MAX_VALUE;
+            int start = 0;
+            int end = 0;
+            long sum = 0;
+            while(end < n){
+                if(end - start + 1 <= k){
+                    sum += res[end];
+                    end++;
+                    continue;
+                }
+                ans = min(ans, sum);
+                sum -= res[start];
+                sum += res[end];
+                end++;
+                start++;
+
+            }
+
+
+            ans = min(ans, sum);
+            out.println(ans);
+
+
         }
 
         out.flush();
         out.close();
-    }
-
-    private static void solve(PrintWriter out){
-
     }
 
 
