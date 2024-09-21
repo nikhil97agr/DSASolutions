@@ -1,13 +1,14 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+public final class CF2008E {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -29,6 +30,54 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        char ch[] = charArray();
+        int even[] = new int[26];
+        int odd[] = new int[26];
+        for(int i=0;i<n;i++){
+            if(i%2==0){
+                even[ch[i]-'a']++;
+            }else{
+                odd[ch[i]-'a']++;
+            }
+        }
+        if(n%2==0){
+
+            int ans = 0;
+            int max1 = Arrays.stream(even).max().getAsInt();
+            int max2 = Arrays.stream(odd).max().getAsInt();
+            ans = n - max1  - max2;
+            out.println(ans);
+            return ;
+        }
+
+        int ans = Integer.MAX_VALUE;
+        int newE[] = new int[26];
+        int newO[] = new int[26];
+        for(int i=0;i<n;i++){
+            int ind = ch[i] - 'a';
+            int max1 = 0;
+            int max2 = 0;
+            if(i%2==0){
+                even[ind]--;
+            }else{
+                odd[ind]--;
+            }
+            for(int j=0;j<26;j++){
+                max1 = Math.max(max1, newE[j] + odd[j] );
+                max2 = Math.max(max2, newO[j] + even[j]);
+            }
+
+            ans = Math.min(ans, n - max1 - max2);
+
+            if(i%2==0){
+                newE[ind]++;
+            }else{
+                newO[ind]++;
+            }
+        }
+        out.println(ans);
+
 
     }
 
@@ -158,19 +207,6 @@ public final class Template {
         if (a == 0) return b;
 
         return gcd(b % a, a);
-    }
-
-    private static long modInverse(long x, long y){
-        if(y==0) return 1;
-        if(y==1) return x;
-
-        long ans = modInverse(x, y/2);
-
-        ans = multiplyMod(ans%mod, ans%mod);
-        if(x%2==1){
-            ans = multiplyMod(ans, x);
-        }
-        return ans;
     }
 
     private static long multiplyMod(long a, long b){

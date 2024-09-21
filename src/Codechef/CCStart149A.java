@@ -1,13 +1,14 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+class CCStart149A {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -29,7 +30,29 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
-
+        int n = read();
+        int arr[] = intArray(n, false);
+        int first = -1;
+        int last = -1;
+        int count = 0;
+        for(int i=0;i<n;i++){
+            if(arr[i] > 0){
+                if(first == -1){
+                    first = i;
+                }
+                last = i;
+            }
+        }
+        if(first == -1){
+            out.println(count);
+            return;
+        }
+        for(int i=first;i<=last;i++){
+            if(arr[i] < 0){
+                count++;
+            }
+        }
+        out.println(count);
     }
 
 
@@ -158,19 +181,6 @@ public final class Template {
         if (a == 0) return b;
 
         return gcd(b % a, a);
-    }
-
-    private static long modInverse(long x, long y){
-        if(y==0) return 1;
-        if(y==1) return x;
-
-        long ans = modInverse(x, y/2);
-
-        ans = multiplyMod(ans%mod, ans%mod);
-        if(x%2==1){
-            ans = multiplyMod(ans, x);
-        }
-        return ans;
     }
 
     private static long multiplyMod(long a, long b){

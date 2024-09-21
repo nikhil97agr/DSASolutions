@@ -1,13 +1,14 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+public final class CF2008D {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -29,8 +30,51 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        int p[] = intArray(n, false);
+        char ch[] = charArray();
+
+        int ans[] = new int[n];
+        boolean visited[] = new boolean[n];
+        boolean pathVis[] = new boolean[n];
+        int pathDig[] = new int[n];
+        for(int i=0;i<n;i++){
+            if(visited[i]) continue;
+            solve(i, ans, ch, visited, pathVis, p, 0,  pathDig);
+        }
+
+        for(int i=0;i<n;i++){
+            out.print(ans[i]+" ");
+        }
+        out.println();
+
+
 
     }
+
+    private static int solve(int i, int[] ans, char[] ch, boolean[] visited, boolean[] pathVis, int[] p, int cnt,  int pathDig[]) {
+
+        pathVis[i] = visited[i] = true;
+
+        int next = p[i]-1;
+        int res;
+
+        if(pathVis[next]){
+            res = ans[i] = (ch[i] == '0' ? 1 : 0) +  cnt - pathDig[next] + (ch[next] == '0' && (next!=i) ? 1 : 0);
+        }else if(visited[next]){
+            res= ans[i] = ans[next] + (ch[i] == '0' ? 1 : 0);
+        }else{
+            pathDig[i] = cnt + (ch[i] == '0' ? 1 : 0);
+            res = ans[i] = solve(next, ans, ch, visited, pathVis, p, pathDig[i], pathDig);
+        }
+
+        pathVis[i] = false;
+        return res;
+
+    }
+
+
+
 
 
     private static String[] stringArray(int n, boolean oneIndexed){
@@ -158,19 +202,6 @@ public final class Template {
         if (a == 0) return b;
 
         return gcd(b % a, a);
-    }
-
-    private static long modInverse(long x, long y){
-        if(y==0) return 1;
-        if(y==1) return x;
-
-        long ans = modInverse(x, y/2);
-
-        ans = multiplyMod(ans%mod, ans%mod);
-        if(x%2==1){
-            ans = multiplyMod(ans, x);
-        }
-        return ans;
     }
 
     private static long multiplyMod(long a, long b){

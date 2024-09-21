@@ -1,79 +1,146 @@
 package Codeforces;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.*;
 
-public final class CF1913C {
-    private static long mod = (long)1e9+7;
-    private static FastReader reader = new FastReader();
+public final class CF1955B {
+    private final static long mod = (long)1e9+7;
+    private final static FastReader reader = new FastReader();
+    private final static String YES = "YES";
+    private final static String NO = "NO";
+
     public static void main(String[] args) {
         PrintWriter out = new PrintWriter(System.out);
         // int test = 1;
-        TreeMap<Integer, Integer> map = new TreeMap<>();
         int test = reader.nextInt();
         while (test-- > 0) {
-            int t = read();
-            int v = read();
-            if(t==1){
-                map.put(v, map.getOrDefault(v, 0)+1);
-                continue;
-            }
-            boolean result = true;
-            TreeMap<Integer, Integer> mp  = new TreeMap<>(map);
-            while(v>0){
-                int pow = (int)(Math.log(v)/Math.log(2));
-                Integer reqPow = mp.floorKey(pow);
-                if(reqPow==null){
-                    result = false;
-                    break;
-                }
-                int num = (1<<reqPow);
-                int x = v / num;
-                int req = Math.min(x, mp.get(reqPow));
-                v -= req*num;
-                if(req == mp.get(reqPow)){
-                    mp.remove(reqPow);
-                }
-            }
 
-            if(result){
-                out.println("YES");
-            }else{
-                out.println("NO");
-            }
-
+            solve(out);
         }
 
         out.flush();
         out.close();
     }
 
+    private static void solve(PrintWriter out){
+        int n = read();
+        long c = read();
+        long d = read();
+        long arr[] = longArray(n*n, false);
+        TreeMap<Long, Integer> map = new TreeMap<>();
+        for(long x : arr) addToMap(x, map);
+        Queue<Pair> que = new LinkedList<>();
+        que.offer(new Pair(0, 0, map.firstKey()));
+        boolean vis[][] =new boolean[n][n];
+        vis[0][0] = true;
+        while(!que.isEmpty()){
+            Pair pair = que.poll();
+            int x = pair.i;
+            int y = pair.j;
+            if(!map.containsKey(pair.val)){
+                out.println("NO");
+                return;
+            }
+            removeFromMap(pair.val, map);
+            if(isValid(x+1, y, n) && !vis[x+1][y]){
+                que.offer(new Pair(x+1, y, pair.val + c));
+                vis[x+1][y] = true;
+            }
 
-    private static String[] stringArray(int n){
+            if(isValid(x, y+1, n) && !vis[x][y+1]){
+                que.offer(new Pair(x, y+1, pair.val + d));
+                vis[x][y+1] = true;
+            }
+
+        }
+
+        out.println("YES");
+
+    }
+
+    private static boolean isValid(int i, int j, int n){
+        return i>=0 && j>=0 && i<n && j<n;
+    }
+    static class Pair{
+        int i;
+        int j;
+        long val;
+
+        @Override
+        public String toString() {
+            return "Pair{" +
+                    "i=" + i +
+                    ", j=" + j +
+                    ", val=" + val +
+                    '}';
+        }
+
+        public Pair(int i, int j, long val){
+            this.i = i;
+            this.j = j;
+            this.val =val;
+        }
+    }
+
+
+    private static String[] stringArray(int n, boolean oneIndexed){
+        int i=0;
         String s[] = new String[n];
-        for(int i=0;i<n;i++){
+        if(oneIndexed){
+            i=1;
+            s = new String[n+1];
+            n++;
+        }
+
+        for(;i<n;i++){
             s[i] = reader.next();
         }
         return s;
     }
-    private static int[] intArray(int n){
+
+    private static long readLong(){
+        return reader.nextLong();
+    }
+
+
+
+    private static int[] intArray(int n, boolean oneIndexed){
+        int i=0;
         int arr[] = new int[n];
-        for(int i=0;i<n;i++){
+        if(oneIndexed){
+            i = 1;
+            arr = new int[n+1];
+            n++;
+        }
+        for(;i<n;i++){
             arr[i] = reader.nextInt();
         }
         return arr;
     }
 
-    private static long[] longArray(int n){
+    private static long[] longArray(int n, boolean oneIndexed){
         long arr[] = new long[n];
-        for(int i=0;i<n;i++){
+        int i =0;
+        if(oneIndexed){
+            i=1;
+            arr = new long[n+1];
+            n++;
+        }
+        for(;i<n;i++){
             arr[i] = reader.nextLong();
         }
         return arr;
+    }
+
+    private static char[] charArray(){
+        return readStr().toCharArray();
+    }
+
+    private static String readStr(){
+        return reader.next();
     }
     private static int read(){
         return reader.nextInt();
@@ -116,6 +183,7 @@ public final class CF1913C {
         if(count==1) map.remove(val);
         else map.put(val, count-1);
     }
+
     private static int max(int...arr){
         return Arrays.stream(arr).max().getAsInt();
     }
@@ -124,35 +192,28 @@ public final class CF1913C {
         return Arrays.stream(arr).min().getAsInt();
     }
 
+    private static long min(long...arr){ return Arrays.stream(arr).min().getAsLong(); }
+
+    private static long max(long...arr){ return Arrays.stream(arr).max().getAsLong(); }
+
+    private static long gcd(long a, long b){
+        if(a==0) return b;
+
+        return gcd(b%a, a);
+    }
+
+    private static int gcd(int a, int b) {
+        if (a == 0) return b;
+
+        return gcd(b % a, a);
+    }
+
     private long multiplyMod(long a, long b){
         return (a*b)%mod;
     }
 
     private long addMod(long a, long b){
         return (a+b)%mod;
-    }
-
-    static class Pair<T>{
-        T first;
-        T second;
-
-        public Pair(T first, T second){
-            this.first = first;
-            this.second =second;
-        }
-
-        @Override
-        public boolean equals(Object ob){
-            Pair pair = (Pair)ob;
-            return this.first == pair.first && this.second == pair.second;
-        }
-
-        @Override
-        public int hashCode(){
-            return (first.toString()+":"+second.toString()).hashCode();
-        }
-
-
     }
 
     static class FastReader {

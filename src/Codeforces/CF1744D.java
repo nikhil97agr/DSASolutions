@@ -1,13 +1,12 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public final class Template {
+public final class CF1744D {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -29,7 +28,52 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        int arr[] = intArray(n, false);
 
+        int cnt = 0;
+        int i=0;
+        while(cnt <n && i < n){
+            cnt += getCnt(arr[i]);
+
+            i++;
+        }
+        if(cnt >=n){
+            out.println(0);
+            return;
+        }
+        int ans = 0;
+
+        List<Integer> list = new ArrayList<>();
+
+        while(i>0){
+            list.add(getCnt(i));
+            i--;
+        }
+        list.sort(Collections.reverseOrder());
+
+        while(i < list.size() && cnt < n){
+            cnt += list.get(i);
+            i++;
+            ans++;
+        }
+
+        if(cnt >=n){
+            out.println(ans);
+            return;
+        }
+
+        out.println(-1);
+
+    }
+
+    private static int getCnt(int i){
+        int cnt = 0;
+        while(i%2==0){
+            i/=2;
+            cnt++;
+        }
+        return cnt;
     }
 
 
@@ -148,6 +192,18 @@ public final class Template {
         return Math.abs(a);
     }
 
+    private static int max(int...arr){
+        return Arrays.stream(arr).max().getAsInt();
+    }
+
+    private static int min(int...arr){
+        return Arrays.stream(arr).min().getAsInt();
+    }
+
+    private static long min(long...arr){ return Arrays.stream(arr).min().getAsLong(); }
+
+    private static long max(long...arr){ return Arrays.stream(arr).max().getAsLong(); }
+
     private static long gcd(long a, long b){
         if(a==0) return b;
 
@@ -158,19 +214,6 @@ public final class Template {
         if (a == 0) return b;
 
         return gcd(b % a, a);
-    }
-
-    private static long modInverse(long x, long y){
-        if(y==0) return 1;
-        if(y==1) return x;
-
-        long ans = modInverse(x, y/2);
-
-        ans = multiplyMod(ans%mod, ans%mod);
-        if(x%2==1){
-            ans = multiplyMod(ans, x);
-        }
-        return ans;
     }
 
     private static long multiplyMod(long a, long b){

@@ -1,13 +1,12 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public final class Template {
+public class CCStart140D{
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -29,7 +28,111 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        long arr[] = longArray(n, false);
 
+        Set<Integer> edge[] = new HashSet[n];
+        for(int i=0;i<n;i++){
+            edge[i] = new HashSet<>();
+        }
+        int degree[] = new int[n];
+        for(int i=0;i<n-1;i++){
+            int u = read()-1;
+            int v = read()-1;
+
+            edge[u].add(v);
+            edge[v].add(u);
+            degree[u]++;
+            degree[v]++;
+        }
+
+        PriorityQueue<Pair> que = new PriorityQueue<>(new PairComparator());
+
+        for(int i=0;i<n;i++)
+        {
+            Pair pair = new Pair(arr[i], degree[i], i);
+
+            if((degree[i]&1)==1)
+                que.add(pair);
+        }
+        List<Integer> res = new ArrayList<>();
+        boolean visited[] = new boolean[n];
+        while(!que.isEmpty()){
+            Pair pair = que.poll();
+            if(visited[pair.ind] || (degree[pair.ind]&1)==0) continue;
+            visited[pair.ind] = true;
+
+            res.add(pair.ind+1);
+
+            for(int child : edge[pair.ind]){
+                edge[child].remove(pair.ind);
+                degree[child]--;
+                if((degree[child]&1)==0){
+                    continue;
+                }
+                Pair  p = new Pair(arr[child], degree[child], child);
+
+                que.offer(p);
+            }
+
+        }
+        out.println(res.size());
+        for(int x : res){
+            out.print(x+" ");
+        }
+        out.println();
+
+
+
+    }
+
+    static class Pair{
+        long val;
+        int degree;
+
+        int ind;
+
+        public Pair(long val, int degree, int ind){
+            this.val = val;
+            this.degree = degree;
+            this.ind= ind;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Pair pair = (Pair) o;
+            return val == pair.val && degree == pair.degree && ind ==pair.ind;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(val, degree, ind);
+        }
+
+        @Override
+        public String toString() {
+            return "Pair{" +
+                    "val=" + val +
+                    ", degree=" + degree +
+                    ", ind=" + ind +
+                    '}';
+        }
+    }
+
+    static class PairComparator implements Comparator<Pair>{
+
+        @Override
+        public int compare(Pair o1, Pair o2) {
+            if(o1.val == o2.val && o1.degree == o2.degree) return o1.ind - o2.ind;
+
+            if(o1.degree== o2.degree){
+                return -Long.compare(o1.val, o2.val);
+            }
+
+            return o1.degree - o2.degree;
+        }
     }
 
 
@@ -139,14 +242,17 @@ public final class Template {
         else map.put(val, count-1);
     }
 
-    private static int abs(int a){
-        return Math.abs(a);
+    private static int max(int...arr){
+        return Arrays.stream(arr).max().getAsInt();
     }
 
-
-    private static long abs(long a){
-        return Math.abs(a);
+    private static int min(int...arr){
+        return Arrays.stream(arr).min().getAsInt();
     }
+
+    private static long min(long...arr){ return Arrays.stream(arr).min().getAsLong(); }
+
+    private static long max(long...arr){ return Arrays.stream(arr).max().getAsLong(); }
 
     private static long gcd(long a, long b){
         if(a==0) return b;
@@ -158,19 +264,6 @@ public final class Template {
         if (a == 0) return b;
 
         return gcd(b % a, a);
-    }
-
-    private static long modInverse(long x, long y){
-        if(y==0) return 1;
-        if(y==1) return x;
-
-        long ans = modInverse(x, y/2);
-
-        ans = multiplyMod(ans%mod, ans%mod);
-        if(x%2==1){
-            ans = multiplyMod(ans, x);
-        }
-        return ans;
     }
 
     private static long multiplyMod(long a, long b){

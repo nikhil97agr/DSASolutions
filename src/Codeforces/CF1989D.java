@@ -1,13 +1,14 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+public final class CF1989D {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -29,7 +30,24 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int x = Math.abs(read());
+        int y = read();
+        int s = 0;
+        if(y>=0){
+            out.println(YES);
+            return;
+        }
+        while(s < x-1){
+            s++;
+            y--;
+        }
 
+        y = Math.abs(y);
+        if(s+1 < y){
+            out.println(NO);
+        }else{
+            out.println(YES);
+        }
     }
 
 
@@ -139,14 +157,17 @@ public final class Template {
         else map.put(val, count-1);
     }
 
-    private static int abs(int a){
-        return Math.abs(a);
+    private static int max(int...arr){
+        return Arrays.stream(arr).max().getAsInt();
     }
 
-
-    private static long abs(long a){
-        return Math.abs(a);
+    private static int min(int...arr){
+        return Arrays.stream(arr).min().getAsInt();
     }
+
+    private static long min(long...arr){ return Arrays.stream(arr).min().getAsLong(); }
+
+    private static long max(long...arr){ return Arrays.stream(arr).max().getAsLong(); }
 
     private static long gcd(long a, long b){
         if(a==0) return b;
@@ -158,19 +179,6 @@ public final class Template {
         if (a == 0) return b;
 
         return gcd(b % a, a);
-    }
-
-    private static long modInverse(long x, long y){
-        if(y==0) return 1;
-        if(y==1) return x;
-
-        long ans = modInverse(x, y/2);
-
-        ans = multiplyMod(ans%mod, ans%mod);
-        if(x%2==1){
-            ans = multiplyMod(ans, x);
-        }
-        return ans;
     }
 
     private static long multiplyMod(long a, long b){

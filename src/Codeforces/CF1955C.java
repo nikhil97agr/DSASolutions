@@ -1,19 +1,18 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+public final class CF1955C {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
     private final static String NO = "NO";
-
-    private final static String DRAW = "DRAW";
 
     public static void main(String[] args) {
         PrintWriter out = new PrintWriter(System.out);
@@ -29,7 +28,89 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        long k = readLong();
+        long arr[] = longArray(n, false);
+        int i=0;
+        int j=n-1;
+        long ans =0;
+        int turn = 0;
+        while(i<j){
+            if(arr[i] > arr[j]){
+                if(turn ==0){
+                    if(arr[j]*2 <=k){
+                        k-= arr[j]*2;
+                        arr[i] -= arr[j];
+                        j--;
+                        ans++;
+                    }else{
+                        break;
+                    }
+                }else{
+                    if(arr[j]*2 -1L <= k){
+                        k-= (arr[j]*2 - 1L);
+                        arr[i] -= (arr[j] - 1);
+                        j--;
+                        ans++;
+                        turn = 0;
+                    }else{
+                        break;
+                    }
+                }
+            }else if(arr[i] < arr[j]){
+                if(turn == 0){
+                    if(arr[i]*2-1L <= k){
+                        k-= (arr[i]*2 - 1L);
+                        arr[j] -= (arr[i] - 1);
+                        ans++;
+                        i++;
+                        turn = 1;
+                    }else{
+                        break;
+                    }
+                }else{
+                    if(k>= arr[i]*2){
+                        k-= arr[i]*2;
+                        arr[j] -= arr[i];
+                        i++;
+                        ans++;
+                    }else{
+                        break;
+                    }
 
+                }
+            }else{
+                if(turn == 0){
+                    if(k>= arr[i]*2-1L){
+                        k-= (arr[i]*2-1L);
+                        i++;
+                        arr[j] = 1L;
+                        ans++;
+                        turn = 1;
+                    }else{
+                        break;
+                    }
+                }else{
+                    if(k >= arr[j]*2 -1L){
+                        k-= (arr[j]*2 - 1L);
+                        j--;
+                        arr[i] = 1L;
+                        ans++;
+                        turn = 0;
+                    }else{
+                        break;
+                    }
+                }
+            }
+        }
+
+        if(i==j){
+            if(k>= arr[i]){
+                ans++;
+            }
+
+        }
+        out.println(ans);
     }
 
 
@@ -103,14 +184,6 @@ public final class Template {
         else map.put(val, count-1);
     }
 
-    private static int sum(int...arr){
-        return Arrays.stream(arr).sum();
-    }
-
-    private static long sum(long...arr){
-        return Arrays.stream(arr).sum();
-    }
-
     private static void addToMap(long val, Map<Long, Integer> map){
         map.put(val, map.getOrDefault(val, 0)+1);
     }
@@ -139,14 +212,17 @@ public final class Template {
         else map.put(val, count-1);
     }
 
-    private static int abs(int a){
-        return Math.abs(a);
+    private static int max(int...arr){
+        return Arrays.stream(arr).max().getAsInt();
     }
 
-
-    private static long abs(long a){
-        return Math.abs(a);
+    private static int min(int...arr){
+        return Arrays.stream(arr).min().getAsInt();
     }
+
+    private static long min(long...arr){ return Arrays.stream(arr).min().getAsLong(); }
+
+    private static long max(long...arr){ return Arrays.stream(arr).max().getAsLong(); }
 
     private static long gcd(long a, long b){
         if(a==0) return b;
@@ -160,24 +236,11 @@ public final class Template {
         return gcd(b % a, a);
     }
 
-    private static long modInverse(long x, long y){
-        if(y==0) return 1;
-        if(y==1) return x;
-
-        long ans = modInverse(x, y/2);
-
-        ans = multiplyMod(ans%mod, ans%mod);
-        if(x%2==1){
-            ans = multiplyMod(ans, x);
-        }
-        return ans;
-    }
-
-    private static long multiplyMod(long a, long b){
+    private long multiplyMod(long a, long b){
         return (a*b)%mod;
     }
 
-    private static long addMod(long a, long b){
+    private long addMod(long a, long b){
         return (a+b)%mod;
     }
 
@@ -241,81 +304,6 @@ public final class Template {
                 e.printStackTrace();
             }
             return str;
-        }
-    }
-
-
-    static class SegmentTree{
-        int tree[];
-        int size;
-        int arr[];
-        int n;
-
-        public SegmentTree(int arr[]){
-            this.n = arr.length;
-            size = 4*n;
-            this.arr = arr.clone();
-            tree = new int[size];
-
-            buildTree(0, n-1, 0);
-        }
-
-        public void buildTree(int start, int end, int ind){
-
-            if(start == end){
-                //modify this logic accordingly
-                tree[ind] = arr[start];
-                return;
-            }
-
-            int mid = (start+end)>>1;
-
-            buildTree(start, mid, 2*ind+1);
-            buildTree(mid+1, end, 2*ind+2);
-
-            //modify the logic accordingly
-            tree[ind] = tree[2*ind+1] + tree[2*ind+2];
-
-        }
-
-        public int query(int s, int e, int qs, int qe, int ind){
-            if(e < qs || s > qe){
-                //modify the logic accordingly
-                return 0;
-            }
-
-            if(qs <= s && e <= qe){
-                //modify the logic accordingly
-                return tree[ind];
-            }
-
-            int mid = (s+e)>>1;
-
-            //modify logic accordingly
-            int left = query(s, mid, qs, qe, 2*ind+1);
-            int right = query(mid+1, e, qs, qe, 2*ind+2);
-
-            return left + right;
-        }
-
-        public void update(int start, int end, int index, int val, int treeIndex){
-            if(index < start || index > end){
-                return;
-            }
-
-            if(start == end){
-                //update the logic accordingly
-                arr[index] = val;
-                tree[treeIndex] = val;
-                return;
-            }
-
-            int mid = (start + end)>>1;
-
-            //modify the logic accordingly
-            update(start, mid, index, val, 2*treeIndex+1);
-            update(mid+1, end, index, val, 2*treeIndex+2);
-            tree[treeIndex] = tree[treeIndex*2+1] + tree[treeIndex*2+2];
         }
     }
 

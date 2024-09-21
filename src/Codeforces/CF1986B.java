@@ -1,13 +1,12 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public final class Template {
+public final class CF1986B {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -29,6 +28,74 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        int m = read();
+        int[][] arr =  new int[n][m];
+        for(int i=0;i<n;i++){
+            arr[i] = intArray(m,false);
+        }
+        Queue<int[]> que = new LinkedList<>();
+
+        que.offer(new int[]{0,0});
+        boolean vis[][] = new boolean[n][m];
+        vis[0][0] = true;
+        while(!que.isEmpty()){
+            int mat[] = que.poll();
+            int i = mat[0];
+            int j = mat[1];
+            int min = Integer.MAX_VALUE;
+            int max = Integer.MIN_VALUE;
+            if(i+1 <n){
+                max = max(max,arr[i+1][j]);
+                if(!vis[i+1][j]){
+                    vis[i+1][j] = true;
+                    que.offer(new int[]{i+1,j});
+                }
+
+
+            }
+
+            if(j+1 <m){
+                max = max(max,arr[i][j+1]);
+                if(!vis[i][j+1]){
+                    vis[i][j+1] = true;
+                    que.offer(new int[]{i,j+1});
+                }
+
+
+            }
+
+            if(i-1 >=0){
+                max = max(max,arr[i-1][j]);
+                if(!vis[i-1][j]){
+                    vis[i-1][j] = true;
+                    que.offer(new int[]{i-1,j});
+                }
+
+
+            }
+
+            if(j-1 >=0){
+                max = max(max,arr[i][j-1]);
+                if(!vis[i][j-1]){
+                    vis[i][j-1] = true;
+                    que.offer(new int[]{i,j-1});
+                }
+
+            }
+
+            if(arr[i][j]>max){
+                arr[i][j] = max;
+            }
+
+        }
+
+        for(int a[] : arr){
+            for(int x : a){
+                out.print(x+" ");
+            }
+            out.println();
+        }
 
     }
 
@@ -103,14 +170,6 @@ public final class Template {
         else map.put(val, count-1);
     }
 
-    private static int sum(int...arr){
-        return Arrays.stream(arr).sum();
-    }
-
-    private static long sum(long...arr){
-        return Arrays.stream(arr).sum();
-    }
-
     private static void addToMap(long val, Map<Long, Integer> map){
         map.put(val, map.getOrDefault(val, 0)+1);
     }
@@ -139,14 +198,17 @@ public final class Template {
         else map.put(val, count-1);
     }
 
-    private static int abs(int a){
-        return Math.abs(a);
+    private static int max(int...arr){
+        return Arrays.stream(arr).max().getAsInt();
     }
 
-
-    private static long abs(long a){
-        return Math.abs(a);
+    private static int min(int...arr){
+        return Arrays.stream(arr).min().getAsInt();
     }
+
+    private static long min(long...arr){ return Arrays.stream(arr).min().getAsLong(); }
+
+    private static long max(long...arr){ return Arrays.stream(arr).max().getAsLong(); }
 
     private static long gcd(long a, long b){
         if(a==0) return b;
@@ -158,19 +220,6 @@ public final class Template {
         if (a == 0) return b;
 
         return gcd(b % a, a);
-    }
-
-    private static long modInverse(long x, long y){
-        if(y==0) return 1;
-        if(y==1) return x;
-
-        long ans = modInverse(x, y/2);
-
-        ans = multiplyMod(ans%mod, ans%mod);
-        if(x%2==1){
-            ans = multiplyMod(ans, x);
-        }
-        return ans;
     }
 
     private static long multiplyMod(long a, long b){

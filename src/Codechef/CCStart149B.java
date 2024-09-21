@@ -1,13 +1,15 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-public final class Template {
+class CCStart149B {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -29,6 +31,44 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        long arr[] = longArray(n, false);
+
+        boolean isZero = false;
+        int neg = 0;
+        long minPos = Long.MAX_VALUE;
+        for(long x : arr){
+            if(x==0) isZero = true;
+            if(x < 0)neg++;
+            if(x > 0 && x < minPos) minPos = x;
+        }
+
+        if(isZero || neg%2 == 0){
+            long sum = Arrays.stream(arr).map(x -> x < 0 ? -x : x).sum();
+            out.println(sum);
+            return;
+        }
+        long sum  =Arrays.stream(arr).filter(x -> x > 0).sum();
+        PriorityQueue<Long> que = new PriorityQueue<>();
+        for(long x : arr){
+            if(x < 0){
+                que.offer(x);
+            }
+        }
+        while(que.size() > 1){
+            sum += (-que.poll());
+        }
+
+        long last = que.poll();
+
+        if(-last > minPos){
+            sum += (-last - 2*minPos);
+        }else{
+            sum += (last);
+        }
+        out.println(sum);
+
+
 
     }
 
@@ -158,19 +198,6 @@ public final class Template {
         if (a == 0) return b;
 
         return gcd(b % a, a);
-    }
-
-    private static long modInverse(long x, long y){
-        if(y==0) return 1;
-        if(y==1) return x;
-
-        long ans = modInverse(x, y/2);
-
-        ans = multiplyMod(ans%mod, ans%mod);
-        if(x%2==1){
-            ans = multiplyMod(ans, x);
-        }
-        return ans;
     }
 
     private static long multiplyMod(long a, long b){

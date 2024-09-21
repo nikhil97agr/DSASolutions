@@ -1,13 +1,14 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+class CCStart141C {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -20,7 +21,6 @@ public final class Template {
         // int test = 1;
         int test = reader.nextInt();
         while (test-- > 0) {
-
             solve(out);
         }
 
@@ -29,7 +29,44 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n =  read();
+        int arr[] = intArray(n, false);
+        Integer dp[][][] =new Integer[n+1][2][2];
+        out.println(solve(arr, 1, 0, n, 0, 0, dp));
+    }
 
+    private static int solve(int arr[], int ind, int max, int n, int swapStart, int swapEnd, Integer dp[][][]){
+
+        if(ind > n){
+            return 0;
+        }
+
+        if(ind == n){
+            max = max(max, arr[ind-1]);
+
+            if(max == n) return 1;
+            return 0;
+        }
+
+        if(dp[ind][swapStart][swapEnd]!=null) return dp[ind][swapStart][swapEnd];
+
+        int nextMax = max(arr[ind-1], max);
+
+        if(swapStart ==0){
+            return dp[ind][swapStart][swapEnd] =  max(
+                    (nextMax == ind ? 1 : 0)  + solve(arr, ind+1, nextMax, n, swapStart, swapEnd, dp),
+                    (max(max, arr[ind]) == ind ? 1 : 0) + (max(nextMax, arr[ind]) == ind+1 ? 1 : 0) + solve(arr, ind+2, max(nextMax, arr[ind]), n, 1, swapEnd, dp)
+            );
+        }else if(swapEnd ==0 ){
+            return dp[ind][swapStart][swapEnd] =  max(
+                    (nextMax == ind ? 1 : 0) + solve(arr, ind+1, nextMax, n, swapStart, 1, dp),
+                    (max(max, arr[ind]) == ind ? 1 : 0) + (max(nextMax, arr[ind]) == ind+1 ? 1 : 0) + solve(arr, ind+2, max(nextMax, arr[ind]), n, 1, 0, dp)
+            );
+        }else{
+
+            return dp[ind][swapStart][swapEnd] =  ((nextMax == ind) ? 1 : 0) + solve(arr, ind+1, nextMax, n, swapStart, swapEnd, dp);
+
+        }
     }
 
 
@@ -148,6 +185,18 @@ public final class Template {
         return Math.abs(a);
     }
 
+    private static int max(int...arr){
+        return Arrays.stream(arr).max().getAsInt();
+    }
+
+    private static int min(int...arr){
+        return Arrays.stream(arr).min().getAsInt();
+    }
+
+    private static long min(long...arr){ return Arrays.stream(arr).min().getAsLong(); }
+
+    private static long max(long...arr){ return Arrays.stream(arr).max().getAsLong(); }
+
     private static long gcd(long a, long b){
         if(a==0) return b;
 
@@ -158,19 +207,6 @@ public final class Template {
         if (a == 0) return b;
 
         return gcd(b % a, a);
-    }
-
-    private static long modInverse(long x, long y){
-        if(y==0) return 1;
-        if(y==1) return x;
-
-        long ans = modInverse(x, y/2);
-
-        ans = multiplyMod(ans%mod, ans%mod);
-        if(x%2==1){
-            ans = multiplyMod(ans, x);
-        }
-        return ans;
     }
 
     private static long multiplyMod(long a, long b){

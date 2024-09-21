@@ -1,13 +1,12 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public final class Template {
+public final class CF1986F {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,9 +26,77 @@ public final class Template {
         out.flush();
         out.close();
     }
-
+    static int timer;
     private static void solve(PrintWriter out){
+        int n = read();
+        int m = read();
+        timer = 0;
+        LinkedList<Integer> adjList[] =new LinkedList[n];
 
+        for(int i=0;i<n;i++){
+            adjList[i] = new LinkedList<>();
+        }
+        for(int i=0;i<m;i++){
+            int u = read()-1;
+            int v = read()-1;
+
+            adjList[u].add(v);
+            adjList[v].add(u);
+        }
+
+        int init[] = new int[n];
+        int low[] = new int[n];
+        List<int[]> bridge = new ArrayList<>();
+        bridge(0,adjList, init, low, new boolean[n], -1, bridge);
+
+        int cnt[] = new int[n];
+
+        dfs(0, adjList, cnt, new boolean[n]);
+        long ans = (1l*n*(n-1))/2;
+        for(int []b : bridge){
+            long x = min(cnt[b[0]], cnt[b[1]]);
+
+            long left = n-x;
+
+            ans = min(ans,( x*(x-1))/2 + (left*(left-1))/2);
+        }
+        out.println(ans);
+    }
+
+    private static void bridge(int u, LinkedList<Integer>[] adjList, int[] init, int[] low, boolean[] visited, int parent, List<int[]> bridges) {
+            visited[u] = true;
+            timer++;
+            init[u] = low[u] = timer;
+
+            for(int v : adjList[u]){
+                if(v == parent) continue;
+
+                if(!visited[v]){
+                    bridge(v, adjList, init, low, visited, u, bridges);
+                }
+
+                low[u] = min(low[u], low[v]);
+
+                if(init[u] < low[v]){
+                    bridges.add(new int[]{u,v});
+                }
+            }
+
+
+    }
+
+    private static int dfs(int u, LinkedList<Integer> adjList[], int cnt[], boolean vis[]){
+
+        vis[u] = true;
+        cnt[u] = 1;
+
+        for(int v : adjList[u]){
+            if(vis[v]) continue;
+
+            cnt[u] += dfs(v, adjList, cnt, vis);
+        }
+
+        return cnt[u];
     }
 
 
@@ -139,14 +206,17 @@ public final class Template {
         else map.put(val, count-1);
     }
 
-    private static int abs(int a){
-        return Math.abs(a);
+    private static int max(int...arr){
+        return Arrays.stream(arr).max().getAsInt();
     }
 
-
-    private static long abs(long a){
-        return Math.abs(a);
+    private static int min(int...arr){
+        return Arrays.stream(arr).min().getAsInt();
     }
+
+    private static long min(long...arr){ return Arrays.stream(arr).min().getAsLong(); }
+
+    private static long max(long...arr){ return Arrays.stream(arr).max().getAsLong(); }
 
     private static long gcd(long a, long b){
         if(a==0) return b;
@@ -158,19 +228,6 @@ public final class Template {
         if (a == 0) return b;
 
         return gcd(b % a, a);
-    }
-
-    private static long modInverse(long x, long y){
-        if(y==0) return 1;
-        if(y==1) return x;
-
-        long ans = modInverse(x, y/2);
-
-        ans = multiplyMod(ans%mod, ans%mod);
-        if(x%2==1){
-            ans = multiplyMod(ans, x);
-        }
-        return ans;
     }
 
     private static long multiplyMod(long a, long b){

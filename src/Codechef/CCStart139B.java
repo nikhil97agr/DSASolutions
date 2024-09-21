@@ -1,13 +1,14 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+class CCStart139B {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -19,18 +20,77 @@ public final class Template {
         PrintWriter out = new PrintWriter(System.out);
         // int test = 1;
         int test = reader.nextInt();
+
+        boolean primes[] = new boolean[1000001];
+        long sum[]=  new long[1000001];
+        long cnt[] = new long[1000001];
+        sum[0] = sum[1] = 0L;
+
+        Arrays.fill(primes, true);
+        primes[0] = primes[1] = false;
+        seives(primes);
+
+        long s = 0;
+        long c = 0;
+        for(int i=2;i<=1000000;i++){
+            if(primes[i]){
+                c++;
+                s += 1L*i;
+            }
+            sum[i] = s;
+            cnt[i] = c;
+        }
         while (test-- > 0) {
 
-            solve(out);
+            solve(out, primes, sum, cnt);
         }
 
         out.flush();
         out.close();
     }
 
-    private static void solve(PrintWriter out){
+    private  static void seives(boolean primes[]){
+
+        for(int i=2;i<=1000000;i++){
+            if(primes[i]){
+                int j=i+i;
+                while(j<=1000000){
+                    primes[j] = false;
+                    j+=i;
+                }
+            }
+        }
+    }
+
+    private static void solve(PrintWriter out, boolean[] primes, long sum[], long cnt[]){
+        int n = read();
+        if((n&1)==0){
+            out.println(n<<1);
+            return;
+        }
+        long ans =0;
+        if(primes[n]){
+            ans = sum[n]*n;
+            out.println(ans);
+            return;
+        }
+
+        int fact = getFact(n);
+        ans = sum[fact]*n;
+        out.println(ans);
+
 
     }
+
+    private static int getFact(long n){
+        for(int x =3;x<=Math.sqrt(n);x+=2){
+            if(n%x==0){
+                return x;
+            }
+        }
+        return 1;
+    }
+
 
 
     private static String[] stringArray(int n, boolean oneIndexed){
@@ -103,14 +163,6 @@ public final class Template {
         else map.put(val, count-1);
     }
 
-    private static int sum(int...arr){
-        return Arrays.stream(arr).sum();
-    }
-
-    private static long sum(long...arr){
-        return Arrays.stream(arr).sum();
-    }
-
     private static void addToMap(long val, Map<Long, Integer> map){
         map.put(val, map.getOrDefault(val, 0)+1);
     }
@@ -139,14 +191,17 @@ public final class Template {
         else map.put(val, count-1);
     }
 
-    private static int abs(int a){
-        return Math.abs(a);
+    private static int max(int...arr){
+        return Arrays.stream(arr).max().getAsInt();
     }
 
-
-    private static long abs(long a){
-        return Math.abs(a);
+    private static int min(int...arr){
+        return Arrays.stream(arr).min().getAsInt();
     }
+
+    private static long min(long...arr){ return Arrays.stream(arr).min().getAsLong(); }
+
+    private static long max(long...arr){ return Arrays.stream(arr).max().getAsLong(); }
 
     private static long gcd(long a, long b){
         if(a==0) return b;
@@ -158,19 +213,6 @@ public final class Template {
         if (a == 0) return b;
 
         return gcd(b % a, a);
-    }
-
-    private static long modInverse(long x, long y){
-        if(y==0) return 1;
-        if(y==1) return x;
-
-        long ans = modInverse(x, y/2);
-
-        ans = multiplyMod(ans%mod, ans%mod);
-        if(x%2==1){
-            ans = multiplyMod(ans, x);
-        }
-        return ans;
     }
 
     private static long multiplyMod(long a, long b){

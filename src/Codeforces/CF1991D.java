@@ -1,13 +1,13 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.util.stream.IntStream;
 
-public final class Template {
+public final class CF1991D {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -29,9 +29,93 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        int color[] = new int[n+1];
+
+        if(n==1){
+            out.println(1);
+            out.println(1);
+            return;
+        }
+
+        if(n==2){
+            out.println(2);
+            out.println(1+" "+2);
+            return;
+        }
+
+        if(n==3)
+        {
+            out.println(2);
+            out.println("1 2 2");
+            return;
+        }
+
+        for(int i=1;i<=n;i+=2){
+            if((i&2)==0){
+                color[i] = 1;
+            }
+        }
+
+        color[2] = color[3] =2;
+
+        for(int i=4;i<=n;i+=2){
+            if((i&2)==0){
+                color[i] = 3;
+            }
+        }
+
+        for(int i=6;i<=n;i+=2){
+            if((i&2)!=0){
+                color[i] = 4;
+            }
+        }
+
+
+        if(n<=6){
+
+        out.println(Arrays.stream(color).max().getAsInt());
+
+        for(int x : color){
+            if(x==0) continue;
+            out.print(x+" ");
+        }
+        out.println();
+        return;
+        }
+        int next = 1;
+        for(int i=1;i<=n;i++){
+            color[i] = next;
+            next%=4;
+            next++;
+        }
+
+        out.println(4);
+        for(int x : color){
+            if(x!=0){
+                out.print(x+" " );
+            }
+        }
+        out.println();
+
+
+
+
+
 
     }
 
+    private static boolean isPrime(int n){
+        if(n==1) return false;
+        if(n==2 || n==3) return true;
+        if((n&1)==0) return false;
+        for(int i=3;i<=Math.sqrt(n);i+=2)
+        {
+            if(n%i==0) return false;
+        }
+
+        return true;
+    }
 
     private static String[] stringArray(int n, boolean oneIndexed){
         int i=0;
@@ -158,19 +242,6 @@ public final class Template {
         if (a == 0) return b;
 
         return gcd(b % a, a);
-    }
-
-    private static long modInverse(long x, long y){
-        if(y==0) return 1;
-        if(y==1) return x;
-
-        long ans = modInverse(x, y/2);
-
-        ans = multiplyMod(ans%mod, ans%mod);
-        if(x%2==1){
-            ans = multiplyMod(ans, x);
-        }
-        return ans;
     }
 
     private static long multiplyMod(long a, long b){

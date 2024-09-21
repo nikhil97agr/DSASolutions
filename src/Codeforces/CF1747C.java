@@ -1,17 +1,18 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+public final class CF1747C {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
-    private final static String YES = "YES";
-    private final static String NO = "NO";
+    private final static String YES = "ALICE";
+    private final static String NO = "BOB";
 
     private final static String DRAW = "DRAW";
 
@@ -29,6 +30,15 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        long arr[] = longArray(n, false);
+        long min = Arrays.stream(arr).min().getAsLong();
+        if(arr[0] == min){
+            out.println(NO);
+        }else{
+            out.println(YES);
+        }
+
 
     }
 
@@ -148,6 +158,18 @@ public final class Template {
         return Math.abs(a);
     }
 
+    private static int max(int...arr){
+        return Arrays.stream(arr).max().getAsInt();
+    }
+
+    private static int min(int...arr){
+        return Arrays.stream(arr).min().getAsInt();
+    }
+
+    private static long min(long...arr){ return Arrays.stream(arr).min().getAsLong(); }
+
+    private static long max(long...arr){ return Arrays.stream(arr).max().getAsLong(); }
+
     private static long gcd(long a, long b){
         if(a==0) return b;
 
@@ -158,19 +180,6 @@ public final class Template {
         if (a == 0) return b;
 
         return gcd(b % a, a);
-    }
-
-    private static long modInverse(long x, long y){
-        if(y==0) return 1;
-        if(y==1) return x;
-
-        long ans = modInverse(x, y/2);
-
-        ans = multiplyMod(ans%mod, ans%mod);
-        if(x%2==1){
-            ans = multiplyMod(ans, x);
-        }
-        return ans;
     }
 
     private static long multiplyMod(long a, long b){

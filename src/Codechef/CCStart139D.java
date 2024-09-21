@@ -1,13 +1,14 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+class CCStart139D {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -29,6 +30,67 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        long arr[] = longArray(n, false);
+        if(n==1){
+            out.println(1);
+            return ;
+        }
+        for(int i=1;i<n-1;i++){
+            if(arr[i] < arr[i-1] && arr[i] > arr[i+1]) {
+                out.println(0);
+                return;
+            }
+        }
+        long low = 1;
+        long high = n;
+        int last = n-1;
+
+        while(last > 0 && arr[last] >= arr[last-1]){
+            last--;
+        }
+
+        int i=1;
+        long prev = arr[0];
+
+        while(i<=last){
+            if(arr[i] > arr[i-1]){
+                prev = arr[i];
+                i++;
+                continue;
+            }
+
+            if(i==last){
+                low = max(low, prev - arr[i]);
+                i++;
+                continue;
+            }
+
+            low = max(low, prev - arr[i]);
+
+            if(arr[i+1] > arr[i]){
+                long max = 0;
+                int i1 = i;
+                while(arr[i1] < arr[i1+1]){
+                    max = max(max, arr[i1+1] - arr[i1]);
+                    i1++;
+                }
+                i = i1;
+                prev = arr[i1];
+                high = min(high, max);
+            }
+            i++;
+
+        }
+
+
+
+        long ans = 0;
+        while(low <= high){
+            ans += low;
+            low++;
+        }
+        out.println(ans);
 
     }
 
@@ -103,14 +165,6 @@ public final class Template {
         else map.put(val, count-1);
     }
 
-    private static int sum(int...arr){
-        return Arrays.stream(arr).sum();
-    }
-
-    private static long sum(long...arr){
-        return Arrays.stream(arr).sum();
-    }
-
     private static void addToMap(long val, Map<Long, Integer> map){
         map.put(val, map.getOrDefault(val, 0)+1);
     }
@@ -139,14 +193,17 @@ public final class Template {
         else map.put(val, count-1);
     }
 
-    private static int abs(int a){
-        return Math.abs(a);
+    private static int max(int...arr){
+        return Arrays.stream(arr).max().getAsInt();
     }
 
-
-    private static long abs(long a){
-        return Math.abs(a);
+    private static int min(int...arr){
+        return Arrays.stream(arr).min().getAsInt();
     }
+
+    private static long min(long...arr){ return Arrays.stream(arr).min().getAsLong(); }
+
+    private static long max(long...arr){ return Arrays.stream(arr).max().getAsLong(); }
 
     private static long gcd(long a, long b){
         if(a==0) return b;
@@ -158,19 +215,6 @@ public final class Template {
         if (a == 0) return b;
 
         return gcd(b % a, a);
-    }
-
-    private static long modInverse(long x, long y){
-        if(y==0) return 1;
-        if(y==1) return x;
-
-        long ans = modInverse(x, y/2);
-
-        ans = multiplyMod(ans%mod, ans%mod);
-        if(x%2==1){
-            ans = multiplyMod(ans, x);
-        }
-        return ans;
     }
 
     private static long multiplyMod(long a, long b){

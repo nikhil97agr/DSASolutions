@@ -1,13 +1,12 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public final class Template {
+public final class CF1986E {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -29,7 +28,82 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        long k = readLong();
+        long[] arr = longArray(n ,false);
+        Map<Long, Integer> map = new HashMap<>();
+        TreeSet<Long> set = new TreeSet<>(Collections.reverseOrder());
+        for(long x : arr){
+            addToMap(x, map);
+        }
 
+        for(Map.Entry<Long, Integer> entry : map.entrySet()){
+            if((entry.getValue()&1)==1){
+                set.add(entry.getKey());
+            }
+        }
+
+        if(set.size() <= 1){
+            out.println(0);
+            return;
+        }
+
+        Map<Long, TreeSet<Long>> m = new HashMap<>();
+        arr = new long[set.size()];
+        int i=0;
+        for(long x : set){
+            m.computeIfAbsent(x%k, a -> new TreeSet<>(Collections.reverseOrder())).add(x);
+            arr[i++] = x;
+        }
+        long ans = 0;
+
+        int odd = 0;
+        for(TreeSet<Long> s : m.values()){
+            if((s.size()&1)==1){
+                odd++;
+            }
+        }
+        if(odd > 1){
+            out.println(-1);
+            return;
+        }
+
+        for(TreeSet<Long> s : m.values()){
+            arr = new long[s.size()];
+            i=0;
+            for(long x : s){
+                arr[i++] = x;
+
+            }
+            if((i&1)==0){
+                i=0;
+                while(i<s.size()){
+                    ans += (arr[i] - arr[i+1])/k;
+                    i+=2;
+                }
+            }else{
+                Long dp[][] = new Long[arr.length][2];
+                ans += solve(arr, 0, arr.length, 1,k, dp);
+            }
+        }
+        out.println(ans);
+    }
+
+    private static long solve(long arr[], int i, int n, int skip, long k, Long dp[][]){
+        if(i==n){
+             return 0;
+        }
+        if(i==n-1){
+            return 0;
+        }
+        if(dp[i][skip]!=null) {
+            return dp[i][skip];
+        }
+        if(skip ==0){
+            return dp[i][skip] = solve(arr,i+2, n, skip, k, dp) + (arr[i] - arr[i+1])/k;
+        }else{
+            return dp[i][skip] =  min(solve(arr, i+1, n, 0, k, dp), solve(arr, i+2, n, 1, k, dp) + (arr[i] - arr[i+1])/k);
+        }
     }
 
 
@@ -103,14 +177,6 @@ public final class Template {
         else map.put(val, count-1);
     }
 
-    private static int sum(int...arr){
-        return Arrays.stream(arr).sum();
-    }
-
-    private static long sum(long...arr){
-        return Arrays.stream(arr).sum();
-    }
-
     private static void addToMap(long val, Map<Long, Integer> map){
         map.put(val, map.getOrDefault(val, 0)+1);
     }
@@ -139,14 +205,17 @@ public final class Template {
         else map.put(val, count-1);
     }
 
-    private static int abs(int a){
-        return Math.abs(a);
+    private static int max(int...arr){
+        return Arrays.stream(arr).max().getAsInt();
     }
 
-
-    private static long abs(long a){
-        return Math.abs(a);
+    private static int min(int...arr){
+        return Arrays.stream(arr).min().getAsInt();
     }
+
+    private static long min(long...arr){ return Arrays.stream(arr).min().getAsLong(); }
+
+    private static long max(long...arr){ return Arrays.stream(arr).max().getAsLong(); }
 
     private static long gcd(long a, long b){
         if(a==0) return b;
@@ -158,19 +227,6 @@ public final class Template {
         if (a == 0) return b;
 
         return gcd(b % a, a);
-    }
-
-    private static long modInverse(long x, long y){
-        if(y==0) return 1;
-        if(y==1) return x;
-
-        long ans = modInverse(x, y/2);
-
-        ans = multiplyMod(ans%mod, ans%mod);
-        if(x%2==1){
-            ans = multiplyMod(ans, x);
-        }
-        return ans;
     }
 
     private static long multiplyMod(long a, long b){

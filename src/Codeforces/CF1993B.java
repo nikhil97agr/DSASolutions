@@ -1,13 +1,12 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public final class Template {
+public final class CF1993B {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -29,6 +28,70 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        long arr[] = longArray(n, false);
+
+        int even = 0;
+        int odd = 0;
+        long maxE = 0;
+        long maxO = 0;
+        for(long x : arr){
+            if((x&1)==0){
+                even++;
+                maxE = Math.max(maxE, x);
+            }else{
+                odd++;
+                maxO = Math.max(maxO, x);
+            }
+        }
+
+
+
+
+        if(odd ==0 || even==0){
+            out.println(0);
+            return;
+        }
+
+        if(maxE < maxO){
+            out.println(even);
+            return;
+        }
+
+        PriorityQueue<Long> q1 = new PriorityQueue<>();
+        PriorityQueue<Long> q2 = new PriorityQueue<>(Collections.reverseOrder());
+
+        int ans = 0;
+        for(long x : arr){
+            if(x%2==0){
+                if(x < maxO){
+                    q2.offer(x);
+                }else{
+                    q1.offer(x);
+                }
+            }
+        }
+        ans += q2.size();
+        while(!q2.isEmpty()){
+            maxO += q2.poll();
+        }
+
+        while(!q1.isEmpty()){
+            if(q1.peek() > maxO){
+                ans += 1 + q1.size();
+                break;
+            }else{
+                ans++;
+                maxO+=q1.poll();
+            }
+        }
+
+        out.println(ans);
+
+
+
+
+
 
     }
 
@@ -158,19 +221,6 @@ public final class Template {
         if (a == 0) return b;
 
         return gcd(b % a, a);
-    }
-
-    private static long modInverse(long x, long y){
-        if(y==0) return 1;
-        if(y==1) return x;
-
-        long ans = modInverse(x, y/2);
-
-        ans = multiplyMod(ans%mod, ans%mod);
-        if(x%2==1){
-            ans = multiplyMod(ans, x);
-        }
-        return ans;
     }
 
     private static long multiplyMod(long a, long b){

@@ -1,13 +1,12 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public final class Template {
+public final class CF1989B {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,8 +26,40 @@ public final class Template {
         out.flush();
         out.close();
     }
-
+    static int ans = Integer.MIN_VALUE;
     private static void solve(PrintWriter out){
+        int n = read();
+        int a[] = intArray(n, false);
+        int b[] = intArray(n, false);
+
+        int rev1 = 0;
+        int rev2 = 0;
+
+        for(int i=0;i<n;i++){
+            if(a[i] != b[i]){
+                if(a[i] > b[i]){
+                    rev1+=a[i];
+                }else{
+                    rev2+=b[i];
+                }
+            }
+        }
+
+        for(int i=0;i<n;i++){
+            if(a[i] == b[i] && a[i] == -1){
+                if(rev1 > rev2) rev1--;
+                else rev2--;
+            }
+
+        }
+
+        for(int i=0;i<n;i++){
+            if(a[i] == b[i] && a[i] == 1){
+                if(rev1 > rev2) rev2++;
+                else rev1++;
+            }
+        }
+        out.println(min(rev1, rev2));
 
     }
 
@@ -139,14 +170,17 @@ public final class Template {
         else map.put(val, count-1);
     }
 
-    private static int abs(int a){
-        return Math.abs(a);
+    private static int max(int...arr){
+        return Arrays.stream(arr).max().getAsInt();
     }
 
-
-    private static long abs(long a){
-        return Math.abs(a);
+    private static int min(int...arr){
+        return Arrays.stream(arr).min().getAsInt();
     }
+
+    private static long min(long...arr){ return Arrays.stream(arr).min().getAsLong(); }
+
+    private static long max(long...arr){ return Arrays.stream(arr).max().getAsLong(); }
 
     private static long gcd(long a, long b){
         if(a==0) return b;
@@ -158,19 +192,6 @@ public final class Template {
         if (a == 0) return b;
 
         return gcd(b % a, a);
-    }
-
-    private static long modInverse(long x, long y){
-        if(y==0) return 1;
-        if(y==1) return x;
-
-        long ans = modInverse(x, y/2);
-
-        ans = multiplyMod(ans%mod, ans%mod);
-        if(x%2==1){
-            ans = multiplyMod(ans, x);
-        }
-        return ans;
     }
 
     private static long multiplyMod(long a, long b){

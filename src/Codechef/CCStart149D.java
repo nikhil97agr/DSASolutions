@@ -1,13 +1,12 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public final class Template {
+class CCStart149D {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -29,9 +28,79 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        long x = read();
+        long k = read();
+        long h[]= longArray(n, false);
+        long ans = 0;
+        TreeMap<Long, Integer> map = new TreeMap<>();
+        for(long y : h)addToMap(y, map);
+
+        long cnt = 0;
+        List<Long> list2 = new ArrayList<>();
+        List<Long> list = new ArrayList<>(map.keySet());
+
+        for(int i=0;i<=n;i++){
+            long next = x*k;
+
+            long search = binarySearch(list, next);
+            long extra = binarySearchRev(list2, next);
+            ans = Math.max(ans, cnt + search - extra );
+
+            Long lower = map.lowerKey(x);
+
+            if(lower == null) break;
+
+            if(map.get(lower) == 1) list2.add(lower);
+            cnt++;
+            x = lower;
+        }
+
+        out.println(ans);
 
     }
 
+    private static long binarySearchRev(List<Long> list, long next){
+        long ans = 0;
+        int start = 0;
+        int end = list.size()-1;
+        int size= list.size();
+        while(start <= end){
+            int mid = (start+end)>>1;
+
+            long val = list.get(mid);
+
+            if(val >= next){
+                start = mid+1;
+            }
+            else{
+                ans = size - mid;
+                end = mid-1;
+            }
+        }
+        return ans;
+    }
+
+
+    private static long binarySearch(List<Long> list, long next){
+        long ans = 0;
+        int start = 0;
+        int end = list.size()-1;
+        while(start <= end){
+            int mid = (start+end)>>1;
+
+            long val = list.get(mid);
+
+            if(val >= next){
+                end = mid-1;
+            }else{
+                ans = mid+1;
+                start = mid+1;
+            }
+        }
+
+        return ans;
+    }
 
     private static String[] stringArray(int n, boolean oneIndexed){
         int i=0;
@@ -158,19 +227,6 @@ public final class Template {
         if (a == 0) return b;
 
         return gcd(b % a, a);
-    }
-
-    private static long modInverse(long x, long y){
-        if(y==0) return 1;
-        if(y==1) return x;
-
-        long ans = modInverse(x, y/2);
-
-        ans = multiplyMod(ans%mod, ans%mod);
-        if(x%2==1){
-            ans = multiplyMod(ans, x);
-        }
-        return ans;
     }
 
     private static long multiplyMod(long a, long b){

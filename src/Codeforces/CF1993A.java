@@ -1,13 +1,13 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public final class Template {
+public final class CF1993A {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -29,6 +29,42 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        long k = read();
+
+        long arr[] = longArray(n, false);
+
+        if(k==1){
+            if(n==1){
+                out.println(arr[0]);
+            }else{
+                out.println(-1);
+            }
+            return;
+        }
+
+        Arrays.sort(arr);
+
+        long max = arr[n-1] + k-1;
+
+        long start = arr[n-1];
+        long end = max;
+
+        for(int i=0;i<n-1;i++){
+            long y = (max - arr[i] )/(2*k);
+
+            long s1 = arr[i] + y*2*k;
+            long mod = (max - arr[i])%(2*k);
+
+            start = Math.max(start, s1);
+            end = Math.min(end, s1 + Math.min(k-1, mod));
+        }
+
+        if(end < start){
+            out.println(-1);
+        }else{
+            out.println(start);
+        }
 
     }
 
@@ -158,19 +194,6 @@ public final class Template {
         if (a == 0) return b;
 
         return gcd(b % a, a);
-    }
-
-    private static long modInverse(long x, long y){
-        if(y==0) return 1;
-        if(y==1) return x;
-
-        long ans = modInverse(x, y/2);
-
-        ans = multiplyMod(ans%mod, ans%mod);
-        if(x%2==1){
-            ans = multiplyMod(ans, x);
-        }
-        return ans;
     }
 
     private static long multiplyMod(long a, long b){

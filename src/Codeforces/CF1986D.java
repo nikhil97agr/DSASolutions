@@ -1,13 +1,14 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.StringTokenizer;
 
-public final class Template {
+public final class CF1986D {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -29,7 +30,33 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        String s = readStr();
+        int arr[] = new int[n];
+        for(int i=0;i<n;i++){
+            arr[i] = s.charAt(i)-'0';
+        }
 
+        Long dp[][] = new Long[n][2];
+
+        out.println(solve(arr, n, 0, 1, dp));
+    }
+
+    private static long solve(int arr[], int n, int i, int left, Long dp[][]){
+        if(i==n-1){
+            return arr[i];
+        }
+        if(dp[i][left]!=null) return dp[i][left];
+        if(left ==0){
+            return dp[i][left] =  min(arr[i] + solve(arr, n, i+1, left, dp), arr[i]*solve(arr, n,i+1, left, dp));
+        }else{
+            if(i==n-2){
+                return dp[i][left] =  arr[i]* 10L +arr[i+1];
+            }else{
+                long num = arr[i]*10L + arr[i+1];
+                return dp[i][left] = min(arr[i] + solve(arr, n, i+1, left, dp), arr[i] * solve(arr, n, i+1, left, dp), num + solve(arr, n,i+2, 0, dp), num*solve(arr, n,i+2, 0, dp));
+            }
+        }
     }
 
 
@@ -103,14 +130,6 @@ public final class Template {
         else map.put(val, count-1);
     }
 
-    private static int sum(int...arr){
-        return Arrays.stream(arr).sum();
-    }
-
-    private static long sum(long...arr){
-        return Arrays.stream(arr).sum();
-    }
-
     private static void addToMap(long val, Map<Long, Integer> map){
         map.put(val, map.getOrDefault(val, 0)+1);
     }
@@ -139,14 +158,17 @@ public final class Template {
         else map.put(val, count-1);
     }
 
-    private static int abs(int a){
-        return Math.abs(a);
+    private static int max(int...arr){
+        return Arrays.stream(arr).max().getAsInt();
     }
 
-
-    private static long abs(long a){
-        return Math.abs(a);
+    private static int min(int...arr){
+        return Arrays.stream(arr).min().getAsInt();
     }
+
+    private static long min(long...arr){ return Arrays.stream(arr).min().getAsLong(); }
+
+    private static long max(long...arr){ return Arrays.stream(arr).max().getAsLong(); }
 
     private static long gcd(long a, long b){
         if(a==0) return b;
@@ -158,19 +180,6 @@ public final class Template {
         if (a == 0) return b;
 
         return gcd(b % a, a);
-    }
-
-    private static long modInverse(long x, long y){
-        if(y==0) return 1;
-        if(y==1) return x;
-
-        long ans = modInverse(x, y/2);
-
-        ans = multiplyMod(ans%mod, ans%mod);
-        if(x%2==1){
-            ans = multiplyMod(ans, x);
-        }
-        return ans;
     }
 
     private static long multiplyMod(long a, long b){
