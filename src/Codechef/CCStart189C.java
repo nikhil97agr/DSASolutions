@@ -1,3 +1,4 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -5,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.*;
 
-public final class Template {
+class CCStart189C {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +28,80 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
 
+        boolean vis[] = new boolean[n+1];
+
+//        int ans[] =new int [n];
+//        Map<Integer, List<int[]>> map = new HashMap<>();
+//        generate(n, vis, 0,  ans, map);
+//        int min = n;
+//        for(int x : map.keySet()){
+//            if(x < min) min =x;
+//        }
+//        System.out.println(min);
+//        for(int temp[] : map.get(min)){
+//            System.out.println(Arrays.toString(temp));
+//        }
+
+        if(n==2){
+            out.println(1+" "+2);
+            return;
+        }
+
+        if(n==3){
+            out.println("3 1 2");
+            return;
+        }
+
+        if(n%2==0){
+            out.print(n+" ");
+            n--;
+        }
+
+        for(int i=n;i>3;i-=2){
+            out.print(i-1+" "+i+" ");
+        }
+
+        out.println("3 1 2");
+
+    }
+
+    private static void generate(int n, boolean vis[], int i, int ans[], Map<Integer, List<int[]>> map){
+        if(i == n){
+            int c = 0;
+            for(int j=0;j<n-1;j++){
+                if(prime(Math.min(ans[j], ans[j+1]))){
+                    c++;
+                }
+            }
+
+            map.computeIfAbsent(c, x -> new ArrayList<>()).add(ans.clone());
+            return ;
+        }
+
+        for(int j=1;j<=n;j++){
+            if(!vis[j]){
+                vis[j] =true;
+                ans[i] = j;
+                generate(n, vis, i+1, ans, map);
+                vis[j] = false;
+            }
+        }
+    }
+
+
+    private static boolean prime(int n){
+        if(n<2) return false;
+
+        if(n==2 || n == 3 ) return true;
+        if(n%2==0) return false;
+
+        for(int i=5;i<n;i+=2){
+            if(n%i==0) return false;
+        }
+
+        return true;
     }
 
 
@@ -50,21 +124,7 @@ public final class Template {
         return reader.nextLong();
     }
 
-    private static int max(int a, int b){
-        return Math.max(a, b);
-    }
 
-    private static int min(int a , int b){
-        return Math.min(a,b);
-    }
-
-    private static long min(long a, long b){
-        return Math.min(a,b);
-    }
-
-    private static long max(long a, long b){
-        return Math.max(a, b);
-    }
 
     private static int[] intArray(int n, boolean oneIndexed){
         int i=0;
@@ -114,7 +174,6 @@ public final class Template {
         if(count==1) map.remove(val);
         else map.put(val, count-1);
     }
-
 
     private static int sum(int...arr){
         return Arrays.stream(arr).sum();
@@ -193,18 +252,6 @@ public final class Template {
 
     private static long addMod(long a, long b){
         return (a+b)%mod;
-    }
-
-    private static int multiplyMod(int a, int b){
-        long prod = 1l*a*b;
-
-        return (int)(prod%mod);
-    }
-
-    private static int addMod(int a, int b){
-        long sum = 1l*a + b;
-
-        return (int)(sum%mod);
     }
 
     static class FastReader {

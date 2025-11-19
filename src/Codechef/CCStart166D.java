@@ -1,11 +1,15 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
 
-public final class Template {
+class CCStart166D {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -15,8 +19,8 @@ public final class Template {
 
     public static void main(String[] args) {
         PrintWriter out = new PrintWriter(System.out);
-        // int test = 1;
-        int test = reader.nextInt();
+         int test = 1 ;
+//        int test = reader.nextInt();
         while (test-- > 0) {
 
             solve(out);
@@ -27,9 +31,81 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        int m = read();
+        boolean primes[] = new boolean[m+1];
+        Arrays.fill(primes, true);
+        primes[0] = primes[1] = false;
+        for(int i=2;i<=m;i++){
+            if(primes[i]){
+                int j = i+i;
+                while (j <= m) {
+                    primes[j] = false;
+                    j+=i;
+                }
+            }
+        }
+
+        Map<Long, Integer> map = new HashMap<>();
+        for(int i=2;i<=m;i++){
+            if(primes[i]){
+                long j=i;
+                while(j<=m){
+                    long cnt = m/j;
+                    map.put(i*1L, map.getOrDefault(i, 0)+(int)cnt);
+                    j = j*i;
+                }
+            }
+        }
+        int arr[] = intArray(n, false);
+        for(int x : arr){
+            Map<Long, Integer> clone = new HashMap<>(map);
+
+            getFactors(clone, x);
+            long prod = 1;
+
+            for(int val : clone.values()){
+                prod = multiplyMod(prod, val+1);
+            }
+            out.print(prod+" ");
+        }
+
+        out.println();
 
     }
 
+    private static void getFactors(Map<Long, Integer> map, int x){
+        while(x%2==0){
+            x/=2;
+            addToMap(2, map);
+        }
+
+        for(int i=3;i<=Math.sqrt(x);i+=2){
+            while(x%i==0){
+                x/=i;
+                addToMap(i, map);
+            }
+        }
+
+        if(x!=1){
+            addToMap(x, map);
+        }
+    }
+    private static int div(long x){
+        int cnt = 0;
+
+        for(long i=1;i<=Math.sqrt(x);i++){
+            if(x%i==0){
+                if(x/i==i){
+                    cnt++;
+                }else{
+                    cnt+=2;
+
+                }
+            }
+        }
+        return cnt;
+    }
 
     private static String[] stringArray(int n, boolean oneIndexed){
         int i=0;
@@ -50,21 +126,7 @@ public final class Template {
         return reader.nextLong();
     }
 
-    private static int max(int a, int b){
-        return Math.max(a, b);
-    }
 
-    private static int min(int a , int b){
-        return Math.min(a,b);
-    }
-
-    private static long min(long a, long b){
-        return Math.min(a,b);
-    }
-
-    private static long max(long a, long b){
-        return Math.max(a, b);
-    }
 
     private static int[] intArray(int n, boolean oneIndexed){
         int i=0;
@@ -114,7 +176,6 @@ public final class Template {
         if(count==1) map.remove(val);
         else map.put(val, count-1);
     }
-
 
     private static int sum(int...arr){
         return Arrays.stream(arr).sum();
@@ -193,18 +254,6 @@ public final class Template {
 
     private static long addMod(long a, long b){
         return (a+b)%mod;
-    }
-
-    private static int multiplyMod(int a, int b){
-        long prod = 1l*a*b;
-
-        return (int)(prod%mod);
-    }
-
-    private static int addMod(int a, int b){
-        long sum = 1l*a + b;
-
-        return (int)(sum%mod);
     }
 
     static class FastReader {

@@ -1,11 +1,14 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.StringTokenizer;
 
-public final class Template {
+public final class CF2131B {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +30,40 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        long k = read();
+        long s[] =longArray(n, false);
+        long t[] = longArray(n, false);
 
+        long a[] = new long[n];
+        long b[] = new long[n];
+
+        for(int i=0;i<n;i++){
+            long val = s[i];
+            long r = val%k;
+            if(r > k -r){
+                r  = k-r;
+            }
+
+            a[i] = r;
+        }
+        for(int i=0;i<n;i++){
+            long val = t[i];
+            long r = val%k;
+            if(r > k -r){
+                r = k-r;
+            }
+            b[i] = r;
+        }
+
+        Arrays.sort(a);
+        Arrays.sort(b);
+
+        if(Arrays.equals(a, b)){
+            out.println(YES);
+        }else{
+            out.println(NO);
+        }
     }
 
 

@@ -1,3 +1,4 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -5,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.*;
 
-public final class Template {
+public final class CF2091E {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -17,17 +18,70 @@ public final class Template {
         PrintWriter out = new PrintWriter(System.out);
         // int test = 1;
         int test = reader.nextInt();
+        boolean isPrime[] = new boolean[10000000+1];
+        Arrays.fill(isPrime, true);
+
+        isPrime[0] = isPrime[1] = false;
+        for(int i=2;i<=10000000;i++){
+
+            if(isPrime[i]){
+                int j = i+i;
+                while(j < (10000000+1)){
+                    isPrime[j] = false;
+                    j+=i;
+                }
+            }
+        }
         while (test-- > 0) {
 
-            solve(out);
+            solve(out,isPrime );
         }
 
         out.flush();
         out.close();
     }
 
-    private static void solve(PrintWriter out){
+    private static void solve(PrintWriter out, boolean primes[]){
+        long ans = 0;
+        int n = read();
+        for(int i=1;i<=n;i++){
+            if(primes[i]){
+                ans += n/i;
+            }
+        }
+        out.println(ans);
+    }
 
+    private static Set<Integer> generate(int a){
+        Set<Integer> set =new HashSet<>();
+        while(a%2==0){
+            set.add(2);
+            a/=2;
+        }
+        for(int j=3;j<=Math.sqrt(a);j+=2){
+            while(a%j==0){
+                a/=j;
+                set.add(j);
+            }
+        }
+
+        if(a!=1){
+            set.add(a);
+        }
+        return set;
+    }
+
+    private static boolean isPrime(long a){
+        if(a== 2 || a ==3 ) return true;
+        if(a%2==0){
+            return false;
+        }
+
+        for(long i=3;i<=Math.sqrt(a);i+=2){
+            if(a%i==0) return false;
+        }
+
+        return true;
     }
 
 
@@ -50,21 +104,7 @@ public final class Template {
         return reader.nextLong();
     }
 
-    private static int max(int a, int b){
-        return Math.max(a, b);
-    }
 
-    private static int min(int a , int b){
-        return Math.min(a,b);
-    }
-
-    private static long min(long a, long b){
-        return Math.min(a,b);
-    }
-
-    private static long max(long a, long b){
-        return Math.max(a, b);
-    }
 
     private static int[] intArray(int n, boolean oneIndexed){
         int i=0;
@@ -114,7 +154,6 @@ public final class Template {
         if(count==1) map.remove(val);
         else map.put(val, count-1);
     }
-
 
     private static int sum(int...arr){
         return Arrays.stream(arr).sum();
@@ -193,18 +232,6 @@ public final class Template {
 
     private static long addMod(long a, long b){
         return (a+b)%mod;
-    }
-
-    private static int multiplyMod(int a, int b){
-        long prod = 1l*a*b;
-
-        return (int)(prod%mod);
-    }
-
-    private static int addMod(int a, int b){
-        long sum = 1l*a + b;
-
-        return (int)(sum%mod);
     }
 
     static class FastReader {

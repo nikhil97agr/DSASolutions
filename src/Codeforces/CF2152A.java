@@ -1,3 +1,4 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -5,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.*;
 
-public final class Template {
+public final class CF2152A {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +28,13 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        Set<Integer> set = new HashSet<>();
+        int arr[] = intArray(n, false);
 
+        for(int x  : arr) set.add(x);
+
+        out.println(2* set.size() - 1);
     }
 
 

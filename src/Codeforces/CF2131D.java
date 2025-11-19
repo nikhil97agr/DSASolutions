@@ -1,11 +1,15 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.StringTokenizer;
 
-public final class Template {
+public final class CF2131D {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +31,43 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        LinkedList<Integer> adjList[] = new LinkedList[n];
+        for(int i=0;i<n;i++){
+            adjList[i] = new LinkedList<>();
 
+        }
+        int leaves[] = new int[n];
+        for(int i=0;i<n-1;i++){
+            int u = read() - 1;
+            int v = read() - 1;
+
+            adjList[u].add(v);
+            adjList[v].add(u);
+
+        }
+
+        if(n==2){
+            out.println(0);
+            return;
+        }
+
+        int leave =0;
+        for(LinkedList<Integer> list : adjList){
+            if(list.size() ==1){
+                leave++;
+                for(int x : list){
+                    leaves[x]++;
+                }
+            }
+        }
+
+        int max = 1;
+
+        for(int x : leaves){
+            max = max(x, max);
+        }
+        out.println(leave - max);
     }
 
 

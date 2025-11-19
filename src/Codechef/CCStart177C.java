@@ -1,11 +1,14 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.StringTokenizer;
 
-public final class Template {
+class CCStart177C {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +30,20 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
-
+        int x = read();
+        int y = read();
+        int k = read();
+        if(x+y < k) {
+            out.println(-1);
+            return;
+        }
+        int diff= abs(x-y);
+        int left = abs(diff - k);
+        if(left%2==0){
+            out.println(left/2);
+        }else{
+            out.println(-1);
+        }
     }
 
 
@@ -50,21 +66,7 @@ public final class Template {
         return reader.nextLong();
     }
 
-    private static int max(int a, int b){
-        return Math.max(a, b);
-    }
 
-    private static int min(int a , int b){
-        return Math.min(a,b);
-    }
-
-    private static long min(long a, long b){
-        return Math.min(a,b);
-    }
-
-    private static long max(long a, long b){
-        return Math.max(a, b);
-    }
 
     private static int[] intArray(int n, boolean oneIndexed){
         int i=0;
@@ -114,7 +116,6 @@ public final class Template {
         if(count==1) map.remove(val);
         else map.put(val, count-1);
     }
-
 
     private static int sum(int...arr){
         return Arrays.stream(arr).sum();
@@ -193,18 +194,6 @@ public final class Template {
 
     private static long addMod(long a, long b){
         return (a+b)%mod;
-    }
-
-    private static int multiplyMod(int a, int b){
-        long prod = 1l*a*b;
-
-        return (int)(prod%mod);
-    }
-
-    private static int addMod(int a, int b){
-        long sum = 1l*a + b;
-
-        return (int)(sum%mod);
     }
 
     static class FastReader {

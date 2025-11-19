@@ -1,11 +1,14 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.StringTokenizer;
 
-public final class Template {
+class CCStart197A {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +30,35 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        int a[] = intArray(n, false);
+        int even = 0;
+        int odd = 0;
+        for(int x : a){
+            if(x%2==0) even++;
+            else odd++;
+        }
 
+        if(odd ==0){
+            out.println(NO);
+            return;
+        }
+
+        if(even ==0){
+            if(odd == 1){
+                out.println(YES);
+            }else{
+                out.println(NO);
+            }
+
+            return;
+        }
+
+        if(odd == 1){
+            out.println(YES);
+        }else{
+            out.println(NO);
+        }
     }
 
 

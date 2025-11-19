@@ -1,3 +1,4 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -5,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.*;
 
-public final class Template {
+class CCStart195C {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +28,108 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        char ch[] = charArray();
+        int ans = n;
+        int one[] = new int[]{-1, -1};
+        int zero[] = new int[]{-1, -1};
+        for(int i=0;i<n;i++){
+            if(ch[i] == '0'){
+                if(zero[0] == -1) zero[0] = i;
+                zero[1] =i;
+            }else{
+                if(one[0] == -1){
+                    one[0] =i;
+                }
+                one[1] =i;
+            }
+        }
+        if(zero[0] == -1 || one[1] == -1){
+            out.println(n);
+            return;
+        }
 
+        if(one[0] == one[1]){
+            int ind = one[0];
+            if(zero[0] < ind && zero[1] > ind){
+                out.println(n-1);
+            }else{
+                out.println(n);
+            }
+            return;
+        }
+
+        if(zero[0] == zero[1]){
+            int ind = zero[0];
+
+            if(one[0] < ind && one[1] > ind){
+                out.println(n-1);
+            }else{
+                out.println(n);
+            }
+
+            return;
+        }
+
+        if(zero[1] < one[0] || zero[0] > one[1]){
+            out.println(n);
+            return;
+        }
+
+        if(zero[0] > one[0] && zero[1] < one[1]){
+            int cnt = 0;
+
+            for(int i=zero[0] ;i<zero[1];i++){
+                if(ch[i] == '1'){
+                    cnt++;
+                }
+            }
+
+            for(int i=one[0];i<one[1];i++){
+                if(ch[i] == '0') cnt++;
+            }
+            ans = min(ans, n - cnt);
+        }
+
+
+        if(one[0] > zero[0] && one[1] < zero[1]){
+            int cnt = 0;
+            for(int i=zero[0] ;i<zero[1];i++){
+                if(ch[i] == '1'){
+                    cnt++;
+                }
+            }
+
+            for(int i=one[0];i<one[1];i++){
+                if(ch[i] == '0') cnt++;
+            }
+
+            ans = min(ans, n - cnt);
+        }
+
+        int c1 = 0;
+        int c2 = 0;
+        for(int i=max(zero[0], one[0])+1;i<min(one[1], zero[1]);i++){
+            if(ch[i] == '1') c1++;
+            else c2++;
+        }
+
+        for(int i=one[0];i<=one[1];i++){
+            if(ch[i] == '0') c1++;
+        }
+
+        for(int i=zero[0];i<zero[1];i++){
+            if(ch[i] == '1'){
+                c2++;
+            }
+        }
+        ans = min(ans, min(n-c1, n-c2));
+
+
+
+
+
+        out.println(ans);
     }
 
 
@@ -193,18 +295,6 @@ public final class Template {
 
     private static long addMod(long a, long b){
         return (a+b)%mod;
-    }
-
-    private static int multiplyMod(int a, int b){
-        long prod = 1l*a*b;
-
-        return (int)(prod%mod);
-    }
-
-    private static int addMod(int a, int b){
-        long sum = 1l*a + b;
-
-        return (int)(sum%mod);
     }
 
     static class FastReader {

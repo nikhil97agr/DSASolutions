@@ -1,3 +1,4 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -5,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.*;
 
-public final class Template {
+class CCStart206D {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -25,10 +26,41 @@ public final class Template {
         out.flush();
         out.close();
     }
-
     private static void solve(PrintWriter out){
+        long n  = readLong();
+        long d = readLong();
 
+        long ans = Long.MAX_VALUE;
+
+        for(int i=0;i<64;i++){
+            long val = 1l<<i;
+
+            if(val > n){
+                break;
+            }
+
+            long rem = n - val;
+
+            if(rem%d!=0) continue;
+
+            long quo = rem / d;
+            long extra = 0;
+            for(int j=i;j>=0;j--){
+                long v = 1l<<j;
+                extra += quo / v;
+                quo %= v;
+            }
+
+            ans = min(ans, i + extra);
+        }
+
+        if(ans == Long.MAX_VALUE){
+            out.println(-1);
+        }else{
+            out.println(ans);
+        }
     }
+
 
 
     private static String[] stringArray(int n, boolean oneIndexed){

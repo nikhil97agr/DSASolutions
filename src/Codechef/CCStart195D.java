@@ -1,11 +1,15 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
 
-public final class Template {
+class CCStart195D {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +31,18 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        int m = read();
+        int arr[] = intArray(n, false);
 
+        Map<Integer, Integer> map = new HashMap<>();
+
+
+        for(int x : arr){
+            addToMap(x, map);
+        }
+
+        out.println(m-map.size());
     }
 
 
@@ -193,18 +208,6 @@ public final class Template {
 
     private static long addMod(long a, long b){
         return (a+b)%mod;
-    }
-
-    private static int multiplyMod(int a, int b){
-        long prod = 1l*a*b;
-
-        return (int)(prod%mod);
-    }
-
-    private static int addMod(int a, int b){
-        long sum = 1l*a + b;
-
-        return (int)(sum%mod);
     }
 
     static class FastReader {

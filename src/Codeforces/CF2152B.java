@@ -1,11 +1,14 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.StringTokenizer;
 
-public final class Template {
+public final class CF2152B {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +30,28 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        long n = read();
+        long rk = read();
+        long ck = read();
+        long rd = read();
+        long cd = read();
 
+        long r = 0;
+        long c = 0;
+
+        if(rk < rd){
+            r = rd;
+        }else if(rk > rd){
+            r = n - rd;
+        }
+
+        if(ck < cd){
+            c = cd;
+        }else if(ck > cd){
+            c = n- cd;
+        }
+
+        out.println(max(c, r));
     }
 
 

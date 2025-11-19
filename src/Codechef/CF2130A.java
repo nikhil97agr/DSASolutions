@@ -1,11 +1,14 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.StringTokenizer;
 
-public final class Template {
+public final class CF2130A {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,6 +30,20 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n =read();
+        int arr[] =intArray(n, false);
+
+        Arrays.sort(arr);
+
+        int zero = 0;
+        for(int x : arr){
+            if(x==0) zero++;
+            else break;
+        }
+
+        out.println(zero + Arrays.stream(arr).sum());
+
+
 
     }
 

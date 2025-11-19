@@ -1,11 +1,15 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.*;
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.StringTokenizer;
 
-public final class Template {
+public final class CF2127B {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +31,49 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        int x = read()-1;
+        char ch[] = charArray();
+        if(x ==0 || x == n-1){
+            out.println(1);
+            return;
+        }
 
+        int rInd= -1;
+        int lInd = -1;
+
+        for(int i=x-1;i>=0;i--){
+            if(ch[i] == '#'){
+                lInd = i;
+                break;
+            }
+        }
+        for(int i=x+1;i<n;i++){
+            if(ch[i] == '#'){
+                rInd =i;
+                break;
+            }
+        }
+        if(lInd == -1 && rInd == -1){
+            out.println(1);
+            return;
+        }
+        if(lInd == -1){
+            out.println(max(1, min(x + 1, n -rInd + 1 )));
+            return;
+        }
+
+        if(rInd == -1){
+            out.println(max(1, min( n- x, lInd + 1 + 1)));
+            return;
+        }
+
+        out.println(
+                max(
+                        min(x + 1,  n - rInd + 1),
+                        min(n -x , lInd + 1 + 1)
+                )
+        );
     }
 
 

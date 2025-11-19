@@ -1,3 +1,4 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -5,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.*;
 
-public final class Template {
+class CCStart206C {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +28,56 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        Map<int[], Integer> map = new LinkedHashMap<>();
+//        generate(0, new int[n], map, new boolean[n]);
+//
+//        int min = map.values().stream().min(Integer::compareTo).get();
+//        System.out.println(min);
+//        for(Map.Entry<int[], Integer>entry : map.entrySet() ){
+//            if(entry.getValue() == min){
+//                System.out.println(Arrays.toString(entry.getKey()));
+//            }
+//        }
 
+        for(int i=n;i>0;i--){
+            out.print(i+" ");
+        }
+        out.println();
+
+    }
+
+    private static void generate(int i, int arr[], Map<int[], Integer> map, boolean vis[]){
+        if(i==arr.length){
+            int t[] = arr.clone();
+            int res = 0;
+            for(int j=0;j<arr.length;j++){
+                int cnt = 0;
+                int temp[] = t.clone();
+                int x = temp[arr.length-1];
+               for(int k=arr.length-1;k>0;k--){
+                   temp[k] = temp[k-1];
+               }
+               temp[0] = x;
+               for(int k=0;k<temp.length;k++){
+                   if(temp[k] == k+1){
+                       cnt++;
+                   }
+               }
+               res=  max(res, cnt);
+               t = temp;
+            }
+            map.put(arr.clone(), res);
+        }
+
+        for(int j=1;j<=arr.length;j++){
+            if(!vis[j-1]){
+                vis[j-1] = true;
+                arr[i] = j;
+                generate(i+1, arr, map, vis);
+                vis[j-1] = false;
+            }
+        }
     }
 
 

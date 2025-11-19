@@ -1,11 +1,14 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.StringTokenizer;
 
-public final class Template {
+public final class CF2130B {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +30,51 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        int s= read();
+        int arr[] = intArray(n, false);
 
+        int sum = Arrays.stream(arr).sum();
+        if(sum > s){
+            for(int x : arr){
+                out.print(x+" ");
+            }
+            out.println();
+            return;
+        }
+
+        if(sum == s){
+            out.println(-1);
+            return;
+        }
+
+        Arrays.sort(arr);
+
+        int c1 = 0;
+        int c2 = 0;
+        for(int x :arr){
+            if(x==1) c1++;
+            else if(x==2) c2++;
+        }
+
+        if(c1 + 2*c2 > s || c1 + 2*c2 == s-1){
+
+            int c0 = n - c1- c2;
+            for(int i=0;i<c0;i++){
+                out.print(0+" ");
+            }
+
+            for(int i=0;i<c2;i++){
+                out.print(2+" ");
+            }
+
+            for(int i=0;i<c1;i++){
+                out.print(1+" ");
+            }
+            out.println();
+        }else{
+            out.println(-1);
+        }
     }
 
 

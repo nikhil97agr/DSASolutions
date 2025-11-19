@@ -1,11 +1,14 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.StringTokenizer;
 
-public final class Template {
+public final class CF2127C {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +30,56 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        int k = read();
+        long[] a = longArray(n, false);
+        long b[] = longArray(n, false);
+        Pair pair[] = new Pair[n];
+        for(int i=0;i<n;i++){
+            pair[i] = new Pair(min(a[i], b[i]), max(a[i], b[i]));
+        }
+        long ans = 0;
+        for(Pair p : pair){
+            ans += (p.b - p.a);
+        }
+        Arrays.sort(pair, (p1, p2)->{
+            if(p1.a == p2.a){
+                return Long.compare(p1.b, p2.b);
+            }
 
+            return Long.compare(p1.a, p2.a);
+        });
+        Long min = Long.MAX_VALUE;
+
+        for(int i=0;i<n-1;i++){
+            Pair p1 = pair[i];
+            Pair p2 = pair[i+1];
+            long original = (p1.b - p1.a) + (p2.b - p2.a);
+
+            long temp[] = new long[]{p1.a, p2.a, p1.b, p2.b};
+
+            Arrays.sort(temp);
+
+            long next = temp[3] - temp[0] + temp[2] - temp[1];
+
+            long diff = next - original;
+            min = min(diff, min);
+        }
+
+        out.println(ans + min);
+
+
+    }
+
+    static class Pair{
+        long a;
+        long b;
+
+        public Pair(long a, long b){
+            this.a = a;
+            this.b = b;
+
+        }
     }
 
 

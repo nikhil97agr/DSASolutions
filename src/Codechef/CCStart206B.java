@@ -1,3 +1,4 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -5,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.*;
 
-public final class Template {
+class CCStart206B {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +28,8 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
-
+        int n = read();
+        out.println(n-2+" "+((n-1)*(n-2))/2);
     }
 
 

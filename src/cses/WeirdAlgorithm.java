@@ -1,11 +1,15 @@
+package cses;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
-public final class Template {
+public final class WeirdAlgorithm {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -15,8 +19,9 @@ public final class Template {
 
     public static void main(String[] args) {
         PrintWriter out = new PrintWriter(System.out);
-        // int test = 1;
-        int test = reader.nextInt();
+         int test = 1;
+//        int test = reader.nextInt();
+//        int test = reader.nextInt();
         while (test-- > 0) {
 
             solve(out);
@@ -28,6 +33,16 @@ public final class Template {
 
     private static void solve(PrintWriter out){
 
+        long n = read();
+
+        while(n!=1){
+            out.print(n+" ");
+
+            if(n%2==0) n/=2;
+            else n = n*3 + 1;
+        }
+
+        out.println(1);
     }
 
 
@@ -193,18 +208,6 @@ public final class Template {
 
     private static long addMod(long a, long b){
         return (a+b)%mod;
-    }
-
-    private static int multiplyMod(int a, int b){
-        long prod = 1l*a*b;
-
-        return (int)(prod%mod);
-    }
-
-    private static int addMod(int a, int b){
-        long sum = 1l*a + b;
-
-        return (int)(sum%mod);
     }
 
     static class FastReader {

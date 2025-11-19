@@ -1,3 +1,4 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -5,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.*;
 
-public final class Template {
+class CCStart193D {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +28,66 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        LinkedList<Integer> adjList[] = new LinkedList[n];
+        for(int i=0;i<n;i++){
+            adjList[i] = new LinkedList<>();
+        }
+        int degree[] = new int[n];
+        for(int i=0;i<n-1;i++){
+            int u = read()-1;
+            int v = read()-1;
+            degree[u]++;
+            degree[v]++;
+            adjList[u].add(v);
+            adjList[v].add(u);
+        }
 
+        PriorityQueue<int[]> que= new PriorityQueue<>((a,b)-> b[0] - a[0]);
+
+        for(int i=0;i<n;i++){
+            que.offer(new int[]{degree[i], i});
+        }
+
+        int p[] =new int[n];
+
+        int next = 0;
+        while(!que.isEmpty()){
+            p[que.poll()[1]] = next++;
+        }
+
+        int ans = 0;
+        boolean vis[] = new boolean[n];
+        for(int i=0;i<n;i++){
+            TreeSet<Integer> set = new TreeSet<>();
+
+            for(int j=0;j<=n;j++){
+                set.add(j);
+            }
+            ans += dfs(i, -1, adjList, set, p, vis);
+            vis[i] = true;
+
+        }
+
+        out.println(ans);
+    }
+
+    private static int dfs(int u, int v, LinkedList<Integer>[] adjList, TreeSet<Integer> set, int[] p, boolean vis[]) {
+        set.remove(p[u]);
+        int ans = 0;
+
+        if(!vis[u]){
+            ans = set.first();
+        }
+        for(int next : adjList[u]){
+            if(next != v){
+                ans += dfs(next, u, adjList, set, p, vis);
+            }
+        }
+
+        set.add(p[u]);
+
+        return ans;
     }
 
 
@@ -193,18 +253,6 @@ public final class Template {
 
     private static long addMod(long a, long b){
         return (a+b)%mod;
-    }
-
-    private static int multiplyMod(int a, int b){
-        long prod = 1l*a*b;
-
-        return (int)(prod%mod);
-    }
-
-    private static int addMod(int a, int b){
-        long sum = 1l*a + b;
-
-        return (int)(sum%mod);
     }
 
     static class FastReader {

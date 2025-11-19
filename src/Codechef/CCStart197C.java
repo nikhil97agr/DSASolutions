@@ -1,11 +1,14 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.StringTokenizer;
 
-public final class Template {
+class CCStart197C {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +30,56 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        int k = read();
+        char ch[] = charArray();
 
+        int start = 1;
+        int end = n;
+        int ans = 1;
+
+
+        while(start <= end){
+            int mid = (start + end)/2;
+
+            if(check(ch, k, mid)){
+                ans = mid;
+                start = mid+1;
+            }else{
+                end = mid-1;
+            }
+        }
+
+
+        out.println(ans);
+    }
+
+    private static boolean check(char ch[], int k, int val){
+        int c1 = 0;int c2 = 0;
+        int cnt = 0;
+        for (char c : ch) {
+            if (c == '0') {
+                c1++;
+                if(c1 >= val){
+                    cnt++;
+                    c1 = 0;
+                    c2 = 0;
+                }
+            }
+            else {
+                c2 = max(c2 + 1, c1 + 1);
+                if(c2 >= val){
+                    cnt++;
+                    c1 = 0;
+                    c2 = 0;
+
+                }
+            }
+
+
+        }
+
+        return cnt >= k;
     }
 
 

@@ -1,3 +1,4 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -5,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.*;
 
-public final class Template {
+public final class CF2091C {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +28,39 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
 
+        if((n&1) == 0){
+            out.println(-1);
+            return;
+        }
+        for(int i=0;i<n;i++){
+            out.print(n-i+" ");
+        }
+        out.println();
+    }
+
+    private static void generate(int n, int arr[], int i, int state){
+        if(i==n){
+            Set<Integer> set = new HashSet<>();
+            for(int j=0;j<n;j++){
+                int pos = j+1;
+                int steps = arr[j] == pos ? 1 : (arr[j] > pos ? (arr[j] - pos + 1) : (n-pos + 1) + arr[j]);
+                set.add(steps);
+            }
+
+            if(set.size() == n){
+                System.out.println(Arrays.toString(arr));
+            }
+        }
+
+        for(int j=1;j<=n;j++){
+            if((state&(1<<j))==0){
+                arr[i] = j;
+                generate(n, arr, i+1, state | (1<<j));
+
+            }
+        }
     }
 
 
@@ -50,21 +83,7 @@ public final class Template {
         return reader.nextLong();
     }
 
-    private static int max(int a, int b){
-        return Math.max(a, b);
-    }
 
-    private static int min(int a , int b){
-        return Math.min(a,b);
-    }
-
-    private static long min(long a, long b){
-        return Math.min(a,b);
-    }
-
-    private static long max(long a, long b){
-        return Math.max(a, b);
-    }
 
     private static int[] intArray(int n, boolean oneIndexed){
         int i=0;
@@ -114,7 +133,6 @@ public final class Template {
         if(count==1) map.remove(val);
         else map.put(val, count-1);
     }
-
 
     private static int sum(int...arr){
         return Arrays.stream(arr).sum();
@@ -193,18 +211,6 @@ public final class Template {
 
     private static long addMod(long a, long b){
         return (a+b)%mod;
-    }
-
-    private static int multiplyMod(int a, int b){
-        long prod = 1l*a*b;
-
-        return (int)(prod%mod);
-    }
-
-    private static int addMod(int a, int b){
-        long sum = 1l*a + b;
-
-        return (int)(sum%mod);
     }
 
     static class FastReader {

@@ -1,11 +1,14 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.StringTokenizer;
 
-public final class Template {
+public final class CF2112A {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +30,55 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        int arr[] = intArray(n, false);
 
+        for(int i=1;i<n;i++){
+            if(abs(arr[i-1]  - arr[i])<=1){
+                out.println(0);
+                return;
+            }
+        }
+
+        if(n==2){
+            out.println(-1);
+            return;
+        }
+
+        boolean res= false;
+
+        for(int i=0;i<n-1;i++){
+            int l = min(arr[i], arr[i+1]);
+            int r = max(arr[i], arr[i+1]);
+
+
+            if(i>0){
+                int tl = arr[i-1] -1;
+                int tr = arr[i-1] + 1;
+
+                if(max(l, tl) <= min(r, tr)){
+                    res = true;
+                    break;
+                }
+
+            }
+
+            if(i+1 < n-1){
+                int tl = arr[i+2] - 1;
+                int tr = arr[i+2] +1;
+
+                if(max(l, tl) <= min(r,tr)){
+                    res = true;
+                    break;
+                }
+            }
+        }
+
+        if(res){
+            out.println(1);
+        }else{
+            out.println(-1);
+        }
     }
 
 
@@ -193,18 +244,6 @@ public final class Template {
 
     private static long addMod(long a, long b){
         return (a+b)%mod;
-    }
-
-    private static int multiplyMod(int a, int b){
-        long prod = 1l*a*b;
-
-        return (int)(prod%mod);
-    }
-
-    private static int addMod(int a, int b){
-        long sum = 1l*a + b;
-
-        return (int)(sum%mod);
     }
 
     static class FastReader {

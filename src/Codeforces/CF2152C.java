@@ -1,11 +1,14 @@
+package Codeforces;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.StringTokenizer;
 
-public final class Template {
+public final class CF2152C {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +30,57 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        int q = read();
+        int arr[] = intArray(n, false);
+        int one[] = new int[n+1];
+        int zero[] = new int[n+1];
 
+        int cono[] = new int[n+1];
+        int conz[] = new int[n+1];
+
+        cono[0] = cono[1] = conz[0] = conz[1] = 0;
+
+        for(int i=2;i<=n;i++){
+            if(arr[i-1] == arr[i-2]){
+                if(arr[i-1] == 1){
+                    cono[i] = cono[i-1] +1;
+                    conz[i] = conz[i-1];
+                }else{
+                    conz[i] = conz[i-1] +1;
+                    cono[i] = cono[i-1];
+                }
+            }else{
+                cono[i] = cono[i-1];
+                conz[i] = conz[i-1];
+            }
+        }
+
+        for(int i=1;i<=n;i++){
+            one[i] = one[i-1] + arr[i-1];
+
+            zero[i] = zero[i-1] + (arr[i-1] ==0 ? 1 : 0);
+        }
+        for(int i=0;i<q;i++){
+            int l = read();
+            int r= read();
+
+            int o = one[r] - one[l-1];
+            int z = zero[r] - zero[l-1];
+
+            if(o%3!=0 || z%3!=0){
+                out.println(-1);
+                continue;
+            }
+
+            int total = r - l + 1;
+
+            if(cono[r] - cono[l] > 0 || conz[r] - conz[l] > 0){
+                out.println(total / 3);
+            }else{
+                out.println((total - 3) / 3 + 2);
+            }
+        }
     }
 
 

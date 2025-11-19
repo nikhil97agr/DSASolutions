@@ -1,3 +1,4 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -5,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.*;
 
-public final class Template {
+class CCStart189A {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,7 +28,29 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+            int n = read();
+            int c= read();
+            int arr[] = intArray(n, false);
+            int b[] = intArray(n, false);
 
+            Map<Integer, Integer> map = new HashMap<>();
+            for(int i=0;i<n;i++){
+                int val = map.getOrDefault(arr[i], Integer.MAX_VALUE);
+                map.put(arr[i], Math.min(val, b[i]));
+            }
+
+        List<Map.Entry<Integer, Integer>> list = new ArrayList<>(map.entrySet());
+            Collections.sort(list, (e1, e2)-> e1.getValue() - e2.getValue());
+            int ans = 0;
+            int cnt = 0;
+            int sum = 0;
+            for(Map.Entry<Integer, Integer> entry : list){
+                cnt++;
+                sum += entry.getValue();
+                ans = Math.max(ans, c*cnt - sum);
+            }
+
+            out.println(ans);
     }
 
 
@@ -50,21 +73,7 @@ public final class Template {
         return reader.nextLong();
     }
 
-    private static int max(int a, int b){
-        return Math.max(a, b);
-    }
 
-    private static int min(int a , int b){
-        return Math.min(a,b);
-    }
-
-    private static long min(long a, long b){
-        return Math.min(a,b);
-    }
-
-    private static long max(long a, long b){
-        return Math.max(a, b);
-    }
 
     private static int[] intArray(int n, boolean oneIndexed){
         int i=0;
@@ -114,7 +123,6 @@ public final class Template {
         if(count==1) map.remove(val);
         else map.put(val, count-1);
     }
-
 
     private static int sum(int...arr){
         return Arrays.stream(arr).sum();
@@ -193,18 +201,6 @@ public final class Template {
 
     private static long addMod(long a, long b){
         return (a+b)%mod;
-    }
-
-    private static int multiplyMod(int a, int b){
-        long prod = 1l*a*b;
-
-        return (int)(prod%mod);
-    }
-
-    private static int addMod(int a, int b){
-        long sum = 1l*a + b;
-
-        return (int)(sum%mod);
     }
 
     static class FastReader {

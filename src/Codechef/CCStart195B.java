@@ -1,11 +1,14 @@
+package Codechef;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.StringTokenizer;
 
-public final class Template {
+class CCStart195B {
     private final static long mod = (long)1e9+7;
     private final static FastReader reader = new FastReader();
     private final static String YES = "YES";
@@ -27,8 +30,64 @@ public final class Template {
     }
 
     private static void solve(PrintWriter out){
+        int n = read();
+        long arr[] = longArray(n, false);
 
+        Long dp[][] = new Long[n][n+1];
+        Arrays.sort(arr);
+        dp[n-1][0] = 0l;
+        for(int i=n-1, j=0;i>=0;i--,j++){
+            dp[n-1][j+1] = dp[n-1][j] + arr[i];
+        }
+        long ans[] = new long[2*n+1];
+        for(int k=1;k<=2*n;k++){
+            int start = (k+1)/2;
+            int end = min(k,n );
+            if(start > end) continue;
+            while(end - start >= 3){
+                int m1 = start + (end - start) / 3;
+                int m2 = end - (end - start) / 3;
+
+                long v1 = dp[n - 1][m1] + calc(m1, k - m1);
+                long v2 = dp[n - 1][m2] + calc(m2, k - m2);
+
+                if(v1 < v2){
+                    start = m1;
+                }else{
+                    end = m2;
+                }
+            }
+
+            long max = -1;
+
+            for(int j=start;j<=end;j++){
+                max = max(max, dp[n-1][j] + calc(j, k-j));
+            }
+
+            out.print(max+" ");
+        }
+        out.println();
     }
+
+    private static long calc(int j, int k){
+        if( k < 0 || k > j) return 0;
+
+        if(k==0) return 0;
+
+        return ((long) k * (2L * j - k - 1))/2;
+    }
+
+    private static long solve(int j, int i, int n, long arr[], Long dp[][]){
+        if(j==0) return 0;
+
+        if (i == n) return Integer.MIN_VALUE;
+
+        if(dp[i][j]!=null) return dp[i][j];
+
+        return dp[i][j] = max(solve(j-1, i+1, n, arr, dp) + arr[i], solve(j, i+1,n , arr, dp));
+    }
+
+
 
 
     private static String[] stringArray(int n, boolean oneIndexed){
@@ -193,18 +252,6 @@ public final class Template {
 
     private static long addMod(long a, long b){
         return (a+b)%mod;
-    }
-
-    private static int multiplyMod(int a, int b){
-        long prod = 1l*a*b;
-
-        return (int)(prod%mod);
-    }
-
-    private static int addMod(int a, int b){
-        long sum = 1l*a + b;
-
-        return (int)(sum%mod);
     }
 
     static class FastReader {
