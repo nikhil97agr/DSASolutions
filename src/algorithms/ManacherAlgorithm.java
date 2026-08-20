@@ -28,7 +28,11 @@ public class ManacherAlgorithm {
         int l = 1;
         int r = 1;
         for (int i = 1; i < n; i++) {
-            p[i] = Math.max(0, Math.min(r - i, p[r - i + l]));
+            if (i < r) {
+                p[i] = Math.max(0, Math.min(r - i, p[l + r - i]));
+            } else {
+                p[i] = Math.max(0, r - i);
+            }
             while (i + p[i] < n && i - p[i] >= 0 && t.charAt(i + p[i]) == t.charAt(i - p[i])) {
                 p[i]++;
             }
